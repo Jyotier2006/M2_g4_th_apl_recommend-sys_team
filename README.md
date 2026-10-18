@@ -69,12 +69,6 @@ python scripts/reproduce.py
 
 The complete reproduction downloads MovieLens from GroupLens if necessary and writes to `Results/reproduced/`. It refuses to overwrite an earlier experiment. The supplied reference results remain intact. See `Code/README.md` for Windows activation, individual commands, checkpoint inference and PDF building.
 
-### Before uploading
-
-Upload the **extracted folder**, preserving its name `M2_g4_th_apl_recommend-sys_team`, to the course-designated repository. Do not replace M1. The supplied M1 repository is a reference; verify the course's designated M2 upload destination.
-
-The team must add its video file or real video link, create its own PPT as requested, review and reproduce the technical work, and each member must submit the separate Google Form. Those items are not claimed as completed. The M2 notice says 15 October 2026 at 11:59 PM; the general guideline PDF lists 11 October. The actual work here is dated 17 October; any extension must be confirmed with the course team.
-
 ### Scope and attribution
 
 Metadata, learned per-user thresholds, dynamics, controlled cold-start and full robustness studies remain M3 work. PreRec is a conceptual SOTA anchor, not an executed baseline. This package was developed with generative-AI assistance, including code, experiment execution and report preparation; the students must review and be able to explain it.

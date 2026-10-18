@@ -1,0 +1,24 @@
+{
+  "ratings": 1000209,
+  "users": 6040,
+  "rated_items": 3706,
+  "movie_metadata_rows": 3883,
+  "user_metadata_rows": 6040,
+  "rating_counts": [
+    56174,
+    107557,
+    261197,
+    348971,
+    226310
+  ],
+  "density": 0.044683625622312845,
+  "timestamp_min": 956703932,
+  "timestamp_max": 1046454590,
+  "duplicate_user_item_pairs": 0,
+  "hashes": {
+    "ratings.dat": "506d64ca44484487c11dc2d9a28de5c54948213e6b96285e298afe28d6ea4e0f",
+    "users.dat": "1dc3a95300cb19f7c10e027daf29b8cdf1d908dab65b5edfb45950aa389a10a3",
+    "movies.dat": "0140fc2356357c1a851d0f52e893a1e4d3696df632c4141cea8d5bc3d621f0b9"
+  },
+  "metadata_used_for_training": false
+}

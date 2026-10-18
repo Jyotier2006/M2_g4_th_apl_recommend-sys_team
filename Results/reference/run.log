@@ -1,0 +1,46 @@
+seed=42 train=800167 validation=100020 test=100022
+global_mean K=0 pass=1: RMSE=1.115984 NLL=1.454677 fit=0.001s
+user_mean K=0 pass=1: RMSE=1.033225 NLL=1.345451 fit=0.046s
+item_mean K=0 pass=1: RMSE=0.974910 NLL=1.316640 fit=0.050s
+mf K=8 pass=25: RMSE=0.864736 NLL=1.217663 fit=3.050s
+adf K=2 pass=1: RMSE=0.897565 NLL=1.252370 fit=1.968s
+ADF/EP1 full-data maximum natural-parameter difference=0.0
+ep K=2 pass=1: RMSE=0.897565 NLL=1.252370 fit=2.074s
+ep K=2 pass=3: RMSE=0.877591 NLL=1.232306 fit=5.969s
+ep K=2 pass=5: RMSE=0.869776 NLL=1.224709 fit=9.965s
+adf K=8 pass=1: RMSE=0.893983 NLL=1.248555 fit=2.414s
+ADF/EP1 full-data maximum natural-parameter difference=0.0
+ep K=8 pass=1: RMSE=0.893983 NLL=1.248555 fit=2.556s
+ep K=8 pass=3: RMSE=0.869069 NLL=1.224199 fit=7.738s
+ep K=8 pass=5: RMSE=0.859476 NLL=1.215012 fit=12.797s
+seed=43 train=800167 validation=100020 test=100022
+global_mean K=0 pass=1: RMSE=1.119930 NLL=1.457815 fit=0.001s
+user_mean K=0 pass=1: RMSE=1.037098 NLL=1.348116 fit=0.045s
+item_mean K=0 pass=1: RMSE=0.982322 NLL=1.324461 fit=0.041s
+mf K=8 pass=25: RMSE=0.868483 NLL=1.221309 fit=2.411s
+adf K=2 pass=1: RMSE=0.906834 NLL=1.261402 fit=1.845s
+ADF/EP1 full-data maximum natural-parameter difference=0.0
+ep K=2 pass=1: RMSE=0.906834 NLL=1.261402 fit=2.164s
+ep K=2 pass=3: RMSE=0.892984 NLL=1.246561 fit=6.152s
+ep K=2 pass=5: RMSE=0.881535 NLL=1.235042 fit=10.084s
+adf K=8 pass=1: RMSE=0.903388 NLL=1.257190 fit=2.686s
+ADF/EP1 full-data maximum natural-parameter difference=0.0
+ep K=8 pass=1: RMSE=0.903388 NLL=1.257190 fit=2.834s
+ep K=8 pass=3: RMSE=0.878140 NLL=1.231593 fit=8.251s
+ep K=8 pass=5: RMSE=0.867462 NLL=1.221135 fit=13.550s
+seed=44 train=800167 validation=100020 test=100022
+global_mean K=0 pass=1: RMSE=1.116365 NLL=1.454882 fit=0.001s
+user_mean K=0 pass=1: RMSE=1.035604 NLL=1.347191 fit=0.045s
+item_mean K=0 pass=1: RMSE=0.978324 NLL=1.320469 fit=0.044s
+mf K=8 pass=25: RMSE=0.870955 NLL=1.224155 fit=3.538s
+adf K=2 pass=1: RMSE=0.898970 NLL=1.253231 fit=2.211s
+ADF/EP1 full-data maximum natural-parameter difference=0.0
+ep K=2 pass=1: RMSE=0.898970 NLL=1.253231 fit=2.435s
+ep K=2 pass=3: RMSE=0.883364 NLL=1.237025 fit=6.810s
+ep K=2 pass=5: RMSE=0.876550 NLL=1.230147 fit=11.367s
+adf K=8 pass=1: RMSE=0.896501 NLL=1.250235 fit=2.832s
+ADF/EP1 full-data maximum natural-parameter difference=0.0
+ep K=8 pass=1: RMSE=0.896501 NLL=1.250235 fit=2.780s
+ep K=8 pass=3: RMSE=0.871966 NLL=1.225591 fit=8.572s
+ep K=8 pass=5: RMSE=0.862902 NLL=1.216748 fit=14.550s
+Completed. Test metrics are descriptive, prespecified checkpoints; no test-based tuning.

@@ -1,0 +1,29 @@
+{
+  "start_utc": "2026-10-17T13:28:00.293284+00:00",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "processor": "x86_64",
+  "cpu_count": 9,
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "pandas": "2.2.3",
+    "matplotlib": "3.10.8",
+    "numba": "0.68.0"
+  },
+  "command": [
+    "/workspace/scratch/88c05d49406a/M2_g4_th_apl_recommend-sys_team/Code/src/matchbox_m2/experiment.py",
+    "--data-root",
+    "tmp/sources/ml-1m",
+    "--output",
+    "M2_g4_th_apl_recommend-sys_team/Results/reference"
+  ],
+  "threads": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMBA_NUM_THREADS": "1"
+  },
+  "timing": "Single process, CPU; fit time excludes compilation, data I/O and KPI evaluation. MF includes validation/checkpoint selection and scale calibration. Prediction time is measured separately.",
+  "end_utc": "2026-10-17T13:29:49.791714+00:00"
+}

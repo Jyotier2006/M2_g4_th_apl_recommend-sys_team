@@ -1,0 +1,18 @@
+{
+  "tests_run": 9,
+  "failures": 0,
+  "errors": 0,
+  "successful": true,
+  "tests": [
+    "test_checkpoint_roundtrip",
+    "test_first_pass_ep_equals_adf",
+    "test_k0_single_factor_matches_exact_marginals",
+    "test_one_rating_revisit_does_not_double_count",
+    "test_prior_plus_sites_equals_global_natural_parameters",
+    "test_probabilities_and_metrics",
+    "test_product_prediction_moments_against_monte_carlo",
+    "test_splits_disjoint_complete_reproducible",
+    "test_truncation_against_independent_quadrature"
+  ],
+  "scope": "Exact local Gaussian/ordinal cases and implementation invariants; not a proof of global EP convergence or exact bilinear inference"
+}

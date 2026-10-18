@@ -1,0 +1,610 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=20mm,headheight=15pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,booktabs,tabularx,longtable,graphicx}
+\usepackage[table]{xcolor}
+\usepackage{enumitem,fancyhdr,caption,placeins}
+\usepackage[hidelinks]{hyperref}
+\definecolor{ink}{HTML}{244F65}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist{nosep,leftmargin=1.4em}
+\captionsetup{font=small,labelfont=bf}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small CSE 516: Probabilistic Graphical Models}
+\fancyhead[R]{\small M2 / Group 4}
+\fancyfoot[C]{\small\thepage}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\N}{\mathcal N}
+\newcommand{\figdir}{figures}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\begin{document}
+\begin{center}
+{\small Ahmedabad University \quad | \quad Theoretical AI}\par
+\vspace{5pt}
+{\Large\bfseries Bayesian Personalized Recommendation using\\[3pt]
+Latent Trait Models \& Expectation Propagation}\par
+\vspace{7pt}
+{\large Milestone 2: Technical Foundation}\par
+\vspace{6pt}
+\begin{tabular}{ll@{\qquad}ll}
+AU2440170 & Jyotier Vithalani & AU2440234 & Tanmay Kanani\\
+AU2440259 & Ansh Chaudhari & AU2440178 & Shlok Shah\\
+AU2440221 & Het Patel & &
+\end{tabular}\par
+\vspace{6pt}
+{\small Technical snapshot and experiment date: 17 October 2026}
+\end{center}
+\vspace{2pt}
+\begin{abstract}
+This milestone turns the M1 proposal into a reproducible study of approximate
+Bayesian inference. We implement an identity-only, static Matchbox variant with
+Gaussian latent traits, user/item biases and fixed ordinal rating thresholds.
+The implementation exposes the distinction between single-pass assumed-density
+filtering (ADF) and repeated expectation propagation (EP): EP stores and removes
+old rating messages before replacing them. Product factors use variational
+messages, so the algorithm is a hybrid EP/VMP procedure. On the full MovieLens
+1M dataset, three paired random splits give RMSE $0.8980\pm0.0049$ for ADF and
+$0.8633\pm0.0040$ after five EP passes at eight traits. Mean fitting time rises
+from 2.64 to 13.63 seconds, and EP requires 219.77 MiB of rating-site storage.
+The conventional matrix-factorization baseline reaches clipped-point RMSE
+$0.8646\pm0.0031$, making its accuracy close to EP5 at lower measured cost.
+Nine mathematical and implementation checks pass. A separate quadrature study
+reveals variance and correlation errors in the approximation. These are initial
+technical results, not a reproduction of the complete Matchbox system or a
+claim of state-of-the-art performance.
+\end{abstract}
+
+\section{Problem, research question and progress from M1}
+Sparse ratings leave substantial uncertainty about both user preferences and
+item characteristics. A latent-trait model shares information between ratings
+through common user and item variables. A Bayesian approximation also retains
+parameter uncertainty, instead of storing only one fitted vector per entity.
+Our theoretical question remains: \emph{what accuracy, probability quality,
+computation and memory trade-offs arise when ADF is replaced by repeated EP?}
+
+M0 selected Matchbox and MovieLens 1M. M1 specified the representation, baselines,
+KPIs and experiments but contained no implementation or measured results. M2
+now includes data validation, a concrete graph specification, parameter-learning
+and prediction code, implemented baselines, numerical checks and recorded runs.
+The graph structure is fixed; this project does not perform structure discovery.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}lXX@{}}\toprule
+M1 direction & M2 implementation & Later work\\\midrule
+ADF versus EP & Separate ADF path and cached-site EP; 1, 3, 5 passes & Longer runs, order and damping sensitivity\\
+Latent dimensionality & $K=2,8$ on three splits & Wider dimension/prior study\\
+Ordinal feedback & Fixed global cuts at 1.5, 2.5, 3.5, 4.5 & Learned user-specific thresholds\\
+Metadata and sparsity & Metadata files validated; ID-only training & Metadata ablation; controlled user cold-start\\
+SOTA positioning & Matchbox implementation anchor; PreRec conceptual comparison & Revisit after M3 experiments\\\bottomrule
+\end{tabularx}
+\caption{Scope changes are explicit. Deferred experiments are not reported as completed.}
+\end{table}
+
+\section{Probabilistic representation}
+\subsection{Variables, observations and assumptions}
+For users $u\in\{1,\ldots,U\}$ and items $i\in\{1,\ldots,I\}$, let
+$s_u,t_i\in\mathbb R^K$ be latent traits and $b_u,b_i\in\mathbb R$ be biases.
+For an observed pair $(u,i)\in\mathcal D$, define
+\begin{align}
+z_{uik}&=s_{uk}t_{ik}, &
+a_{ui}&=\mu+b_u+b_i+\sum_{k=1}^{K}z_{uik},\label{eq:affinity}\\
+y_{ui}\mid a_{ui}&\sim\N(a_{ui},\beta^2), &
+R_{ui}=r&\iff c_{r-1}<y_{ui}\leq c_r.\label{eq:ordinal}
+\end{align}
+The rating is observed; traits, biases and the noisy affinity are latent.
+The fixed threshold vector is $c=(-\infty,1.5,2.5,3.5,4.5,+\infty)$.
+The plug-in offset $\mu$ is the training-set mean rating; its uncertainty is not
+modelled. Priors factorize:
+\begin{equation}
+s_{uk}\sim\N(m^0_{uk},\sigma_s^2),\quad
+t_{ik}\sim\N(n^0_{ik},\sigma_t^2),\quad
+b_u,b_i\sim\N(0,\sigma_b^2).
+\end{equation}
+The small trait prior means are sampled once from $\N(0,0.1^2)$ using the run
+seed and then held fixed. They break the bilinear sign symmetry without using
+held-out labels. This is a modelling choice requiring sensitivity analysis,
+not a parameter learned from the test data.
+
+\subsection{Factorization and conditional independence}
+Writing $\Theta=(S,T,b_U,b_I)$ and using the deterministic relations in
+Equation~\ref{eq:affinity}, the joint distribution has the form
+\begin{equation}
+\begin{aligned}
+p(\Theta,Z,A,Y,R)=p(\Theta)\prod_{(u,i)\in\mathcal D}
+&\left[\prod_k\delta(z_{uik}-s_{uk}t_{ik})\right]
+\delta\!\left(a_{ui}-\mu-b_u-b_i-\sum_k z_{uik}\right)\\
+&\times\N(y_{ui};a_{ui},\beta^2)\,
+\mathbf1\{c_{R_{ui}-1}<y_{ui}\le c_{R_{ui}}\}.
+\end{aligned}\label{eq:joint}
+\end{equation}
+The Gaussian prior factors regularize traits and biases. Product factors express
+preference compatibility; the sum factor combines compatibility and systematic
+rating offsets. The Gaussian factor represents residual variability and the
+interval factor maps a continuous score to an observed rating.
+
+Ratings are conditionally independent given all relevant latent parameters and
+fixed hyperparameters. Ratings sharing a user or item are generally dependent
+after those parameters are marginalized out. Independent priors do \emph{not}
+imply independent posterior parameters: the factorized Gaussian posterior is an
+approximation. The model assumes stationary preferences and treats the observed
+rating sample as its target population. It does not model why a user chose to
+rate a movie or identify causal effects.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.88\linewidth]{\figdir/factor_graph.pdf}
+\caption{The implemented factorization for one rating. The dimension plate repeats
+the product construction. User/item variables are shared by all corresponding
+ratings. \code{graph.py} also exports an actual small bipartite graph to JSON;
+the optimized numerical kernel implements these factors without allocating a
+large Python object for every rating.}
+\label{fig:graph}
+\end{figure}
+
+\section{Learning and inference}
+\subsection{What is learned and what is queried?}
+Training approximates $p(\Theta\mid R_{\mathcal D})$ by a product of univariate
+Gaussians. The stored natural parameters are precision $\lambda=1/v$ and
+precision-weighted mean $\eta=m/v$. Parameter learning therefore consists of
+updating posterior beliefs about traits and biases. Thresholds, graph edges,
+noise variance and prior variances remain fixed in the reference experiment.
+
+Prediction asks for the full five-class distribution
+$p(R_{ui}=r\mid R_{\mathcal D})$ on an unobserved rating. Let $m_s,v_s,m_t,v_t$
+denote approximate trait moments. Independence within $q$ gives
+\begin{align}
+\E[s_kt_k]&=m_{s_k}m_{t_k},\\
+\Var(s_kt_k)&=v_{s_k}v_{t_k}+v_{s_k}m_{t_k}^{2}+v_{t_k}m_{s_k}^{2},\label{eq:productvar}\\
+m_y&=\mu+m_{b_u}+m_{b_i}+\sum_km_{s_k}m_{t_k},\\
+v_y&=\beta^2+v_{b_u}+v_{b_i}+\sum_k\Var(s_kt_k).
+\end{align}
+These are exact moments under the factorized $q$; replacing the sum of products
+by a Gaussian is an additional approximation. The resulting probability is
+\begin{equation}
+\widehat p_r=\Phi\left(\frac{c_r-m_y}{\sqrt{v_y}}\right)
+-\Phi\left(\frac{c_{r-1}-m_y}{\sqrt{v_y}}\right).\label{eq:prediction}
+\end{equation}
+The main point prediction is $\widehat R=\sum_{r=1}^{5}r\widehat p_r$.
+We also record the categorical median, the appropriate decision for absolute
+error. The probability floor of $10^{-15}$ is applied only for numerical
+protection and the probabilities are renormalized.
+
+\subsection{Local hybrid EP/VMP update}
+Matchbox uses variational messages for the bilinear product and EP or exact
+Gaussian messages for other factors~\cite{stern2009}. Our implementation follows
+that division rather than labelling every operation ``EP.'' During an update,
+the user and item cavity distributions are kept fixed. A local loop alternates
+forward product moments, Gaussian sum/noise propagation, ordinal moment matching
+and reverse messages. The loop reconstructs each marginal from its cavity and
+current message; it does not repeatedly add the same likelihood.
+
+For the ordinal factor, let the incoming score distribution be $\N(m,v)$ and
+set $\alpha=(c_{r-1}-m)/\sqrt v$, $\gamma=(c_r-m)/\sqrt v$ and
+$Z=\Phi(\gamma)-\Phi(\alpha)$. The tilted moments are
+\begin{align}
+\widehat m&=m+\sqrt v\,\frac{\phi(\alpha)-\phi(\gamma)}{Z},\label{eq:truncmean}\\
+\widehat v&=v\left[1+\frac{\alpha\phi(\alpha)-\gamma\phi(\gamma)}{Z}
+-\left(\frac{\phi(\alpha)-\phi(\gamma)}{Z}\right)^2\right].\label{eq:truncvar}
+\end{align}
+Gaussian division produces its outgoing message:
+$\lambda_{\mathrm{out}}=\widehat v^{-1}-v^{-1}$ and
+$\eta_{\mathrm{out}}=\widehat m/\widehat v-m/v$.
+Gaussian noise and sums then propagate the message toward each product.
+If the reverse message to $z=st$ has moments $m_z^{\leftarrow},v_z^{\leftarrow}$,
+the VMP message to $s$ is
+\begin{equation}
+\lambda_{f\to s}=\frac{\E[t^2]}{v_z^{\leftarrow}},\qquad
+\eta_{f\to s}=\frac{m_z^{\leftarrow}\E[t]}{v_z^{\leftarrow}},\label{eq:vmp}
+\end{equation}
+with the analogous expression for $t$. The second moment
+$\E[t^2]=v_t+m_t^2$ is essential. It is one reason VMP uncertainty can differ
+from exact inference. Gaussian reverse messages update the biases.
+
+The reference local loop uses at most 10 iterations, natural-parameter damping
+0.7 and an absolute mean/variance change tolerance of $10^{-4}$. A capped local
+update is retained and counted. Non-positive cavities, numerical underflow or
+non-finite outputs are counted and skipped; no such skip occurred in the
+reference benchmark. Appendix~\ref{app:derivation} details the reverse sums.
+
+\subsection{ADF versus EP: avoiding double counting}
+For each rating $n$, EP stores a factorized Gaussian site $\widetilde f_n$.
+For a touched scalar parameter, the global approximation satisfies
+\begin{equation}
+\lambda=\lambda_0+\sum_n\lambda_n,\qquad
+\eta=\eta_0+\sum_n\eta_n.\label{eq:site_sum}
+\end{equation}
+Before revisiting rating $n$, its old contribution is removed:
+\begin{equation}
+\lambda^{\setminus n}=\lambda-\lambda_n,\qquad
+\eta^{\setminus n}=\eta-\eta_n.\label{eq:cavity}
+\end{equation}
+The local hybrid update returns a replacement site. On later passes its natural
+parameters are damped with weight 0.5 toward the new site; the global parameters
+become cavity plus replacement. The first pass uses weight 1.0. All sites begin
+at zero, so the first EP pass equals ADF exactly under the same priors and order.
+
+ADF immediately discards each site's messages after incorporating a new rating.
+It needs no rating-site cache. Replaying the data while keeping the posterior
+but omitting Equation~\ref{eq:cavity} would count observations again; it is not
+the EP algorithm. The ADF interface explicitly rejects a second pass. The six
+full-data ADF/EP1 comparisons have zero maximum natural-parameter difference.
+
+There is no general convergence guarantee for this loopy, hybrid approximation.
+Five outer passes are a declared computation budget, not a claim of convergence.
+We log validation error, local iteration counts and parameter changes separately.
+
+\section{Mathematical validation and computational cost}
+\subsection{Independent checks}
+The submitted validation command runs nine checks: ordinal moments against
+independent numerical integration; an exact $K=0$ Gaussian/ordinal case;
+ADF--EP1 equality; the prior-plus-sites identity; no double counting on revisiting
+one rating; product moments against Monte Carlo; probability and metric sanity;
+complete, disjoint, reproducible splits; and prediction-preserving checkpoint
+reload. All nine passed. These checks validate specific calculations and
+implementation invariants, not exact inference over the complete model.
+
+\subsection{A bilinear case with a numerical reference}
+To examine the approximation itself, use one rating $R=5$, offset 3 and noise
+variance 1, with $s\sim\N(0.5,0.4)$ and $t\sim\N(0.8,0.4)$. Two zero-mean
+biases have variance $10^{-8}$. Tensor-product Gauss--Hermite quadrature
+integrates the likelihood $P(y>4.5\mid s,t)$ over the two traits, analytically
+integrating the tiny biases. Increasing the order from 40 to 80 changes the
+reported moments by at most $1.04\times10^{-10}$. This is a converged numerical
+reference, not a symbolic proof. For this diagnostic only, the local loop is
+allowed 500 iterations at tolerance $10^{-12}$ and converges after 50.
+
+\begin{table}[htbp]\centering\small
+\input{generated/validation_table.tex}
+\caption{One-observation validation. ``Reference change'' compares quadrature
+orders 40 and 80. The nonzero exact posterior covariance cannot be retained by
+the factorized approximation.}
+\label{tab:quadrature}
+\end{table}
+
+The approximate means are within 0.013 of the reference, but both variances are
+about 10\% too small. The covariance is forced to zero. Thus, passing local
+formula checks is compatible with measurable model-level approximation error.
+This is a concrete reason to investigate uncertainty quality in M3.
+
+\subsection{Complexity and stored state}
+For $N$ training ratings, $K$ traits, $L$ local iterations and $T$ outer passes,
+the numerical work is $O(TNLK)$ (or $O(TNL(K+1))$ including the bias-only case).
+Predicting $M$ ratings costs $O(MK)$. Posterior state uses
+$O((U+I)(K+1))$ storage. Full EP additionally stores two natural parameters for
+each of $2K+2$ variables touched by every rating:
+\begin{equation}
+\text{site bytes}=8\times2\times N(2K+2)=32N(K+1),
+\end{equation}
+using 64-bit floats. For $N=800{,}167$, $K=8$, this is 230,448,096 bytes, or
+219.77 MiB. ADF's site storage is zero. At $K=8$, the trait/bias model has
+$(6040+3706)\times9=87{,}714$ scalar latent parameters and stores 175,428
+posterior natural-parameter values (about 1.34 MiB). Reported site memory is an
+array-size calculation, not peak process RSS; data and temporary arrays add overhead.
+
+\section{Dataset, baselines and experimental protocol}
+\subsection{Preparation and split control}
+MovieLens 1M is downloaded from GroupLens~\cite{movielens,harper2015}. The archive
+and three data files are SHA-256 checked before use. The audit finds 1,000,209
+ratings, 6,040 users, 3,706 distinct rated movies, and 3,883 movie metadata rows.
+Movie catalogue size, maximum movie ID and number of rated movies are different
+quantities. Density among the rated user/item vocabulary is 4.468\%, so the
+matrix is approximately 95.532\% unobserved. No duplicate user--item pair is
+present. Movie titles are read as Latin-1. Missing entries are unobserved,
+not negative feedback or zero ratings.
+
+Seeds 42, 43 and 44 independently permute all rating rows. Each split contains
+800,167 training, 100,020 validation and 100,022 test ratings (flooring the
+80\% and 10\% sizes leaves the remainder for test). Models use identical row
+indices for a seed. ID vocabulary construction uses only IDs; means, histograms
+and learned parameters use training ratings. Split indices and their hashes are
+saved. ADF and EP process the same training order, and EP retains it on revisits.
+
+No held-out rating has a user absent from training. The three test splits contain
+26, 9 and 13 ratings, respectively, whose item is absent from training; these are
+retained and use prior information. This small incidental set is not a designed
+cold-start experiment. The split is random by interaction, not chronological,
+and does not measure future deployment performance. The paper's user-level
+cold-start protocol is different, so published Matchbox MAEs are not placed in
+our numerical comparison table.
+
+\subsection{Implemented baselines}
+\textbf{Global, user and item means.} The global model uses training rating
+frequencies $g_r$. For an entity with class counts $n_r$ and total $n$, the
+smoothed categorical prediction is $(n_r+10g_r)/(n+10)$. Its expected rating is
+the corresponding shrinkage mean; an unseen entity falls back to the global
+distribution. This supplies proper probabilities without assigning a fake
+posterior variance to a point estimator.
+
+\textbf{Biased matrix factorization (MF).} We fit
+$\mu+b_u+b_i+p_u^Tq_i$ by regularized squared-error SGD, with $K=8$, learning
+rate 0.007, multiplicative decay 0.98 per epoch, regularization 0.03 and 25
+epochs. Updates use the old user and item vectors for each rating. The epoch
+with lowest validation clipped-point RMSE is retained (epoch 25 for all three
+runs). This is an SVD-style latent-factor baseline, not a literal full-matrix
+SVD or Bayesian inference method. A single Gaussian observation scale is fitted
+on validation NLL within standard deviations $[0.2,3]$, then the same fixed
+thresholds yield five probabilities. We report both the distribution-mean
+decoder and the conventional clipped point prediction. The scale wrapper models
+residual spread, not uncertainty over the MF parameters.
+
+\textbf{ADF.} The single-pass path is the inference baseline for EP. Both paths
+use exactly the same representation, priors and local update code. The two
+trait counts, three reported EP checkpoints, and other settings were fixed before
+the full reference test run. An earlier 100,000-training-row development run
+checked execution; it is not part of the reported benchmark and did not change
+the declared reference hyperparameters.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}lXlX@{}}\toprule
+Setting & Value & Setting & Value\\\midrule
+Trait counts & 2, 8 & Observation variance & $\beta^2=1$\\
+Trait prior variance & 0.25 & Bias prior variance & 1\\
+Prior mean scale & 0.1 & Local tolerance / cap & $10^{-4}$ / 10\\
+Local damping & 0.7 & Outer damping & 1 on pass 1; 0.5 later\\
+EP pass budget & 5 & Reported checkpoints & 1, 3, 5\\
+Main prediction & Categorical expectation & Replicates & Seeds 42, 43, 44\\\bottomrule
+\end{tabularx}
+\caption{Reference configuration. No systematic hyperparameter optimization is claimed.}
+\end{table}
+
+\subsection{KPIs, timing and statistical treatment}
+MAE and RMSE use the expected categorical rating unless explicitly labelled
+``clipped point.'' NLL is the mean $-\log\widehat p_{R}$ in nats. The multiclass
+Brier score is the mean sum of squared errors over the five class probabilities.
+Top-class ECE uses 10 equal-width probability bins. Equal-tail 90\% rating
+intervals and categorical-median MAE are also retained in the result CSV.
+
+Tables report mean $\pm$ sample standard deviation over the three seeded runs.
+The seeds change the split and initialization together; they do not isolate
+these sources of variation. Their datasets overlap, so they are not three
+independent samples from a population. We use paired descriptive differences
+and make no significance claim from three runs. Full robustness and uncertainty
+analysis belong to M3.
+
+Runs used Python 3.12.14 on Linux x86-64, NumPy 2.3.5, SciPy 1.17.0 and Numba
+0.68.0. The container exposed nine logical CPUs; the numerical kernels run
+sequentially and thread environment variables were set to one. Kernel compilation
+is warmed before timing. Fitting times exclude download, parsing and KPI
+evaluation. MF time includes validation checkpoint selection and scale fitting.
+Prediction time is recorded separately. These are wall times in a shared
+container, not hardware-independent speed guarantees.
+
+\section{Initial results and interpretation}
+\subsection{Predictive comparison}
+\begin{table}[htbp]\centering
+\resizebox{\linewidth}{!}{\input{generated/main_table.tex}}
+\caption{Test results on full MovieLens 1M, mean $\pm$ sample SD over three seeds.
+MF's main row uses the probability-distribution mean, like the other rows.
+The final row exposes its standard clipped point decoder; the same calibrated
+probabilities supply its NLL. Times refer to fitting, not end-to-end runtime.}
+\label{tab:main}
+\end{table}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{\figdir/baseline_comparison.pdf}
+\caption{Prediction and probability quality. Error bars are sample SD across
+three paired seeded runs, not confidence intervals. The plotted MF uses its
+distribution-mean decoder.}
+\end{figure}
+
+At eight traits, EP5 reduces mean RMSE by 0.0347 relative to ADF (about 3.86\%)
+and NLL by 0.0344 nats. Every seeded run shows the same direction. The most
+plausible explanation is that later messages can incorporate information learned
+from ratings processed after an earlier rating, while cavity removal avoids
+counting that rating twice. This is an interpretation of the update mechanism
+and observed trend, not a proof that more passes always help.
+
+The comparison with MF is much closer. EP5's RMSE is 0.0048 below the MF
+distribution-mean decoder, but only 0.0013 below the conventional clipped MF
+predictor on average. The clipped MF predictor wins on seed 43. This difference
+is too small and the run count too low to support a broad superiority claim.
+MF is also faster in this implementation. Global/user/item means provide useful
+checks that personalization improves over simple aggregate predictions.
+
+\subsection{Iteration, dimension and resource trade-offs}
+\begin{table}[htbp]\centering\small
+\input{generated/dimensions_table.tex}
+\caption{Mean results by dimension and schedule. Complete per-run values and SDs
+are included in \code{summary.csv}; site memory excludes parameter and data arrays.}
+\label{tab:dimensions}
+\end{table}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{\figdir/ep_tradeoff.pdf}
+\caption{Validation trajectory and test error versus cumulative fitting time.
+Labels on the right are the prespecified EP pass counts. Error bars show SD.}
+\label{fig:tradeoff}
+\end{figure}
+
+Eight traits improve the mean EP5 RMSE over two traits (0.8633 versus 0.8760),
+but require three times as much site memory: 219.77 versus 73.26 MiB. These two
+settings establish a measurable capacity trade-off; they do not locate an optimal
+dimension. EP5 at $K=8$ costs about 5.16 times the measured ADF fit time.
+Prediction remains about 0.56 microseconds per rating in the measured batch
+because EP changes fitted parameters rather than the prediction graph.
+
+No numerical update was skipped. The largest local-cap count is 1,027 out of
+800,167 updates (0.128\%). By pass five at $K=8$, only 10--17 local updates per
+seed reach the cap. Nevertheless, end-of-pass RMS changes in parameter means
+remain 0.0328--0.0347 at that checkpoint. Five passes therefore do not establish
+outer convergence. A local iteration count, an outer pass count and predictive
+stabilization are different diagnostics.
+
+\subsection{Probability quality does not reduce to RMSE}
+At $K=8$, EP improves Brier score from 0.6681 to 0.6547, but top-class ECE rises
+from 0.0449 to 0.0562. Lower NLL and better squared probability error do not
+guarantee improvement in every calibration summary. The pooled reliability
+curve indicates underconfident top-class predictions in substantial probability
+regions. The 90\% equal-tail intervals cover about 98.22\% of test ratings and
+span 3.82 rating categories on average for EP5. Discrete interval rounding makes
+nominal coverage conservative, and fixed observation noise also affects this
+spread. We do not call these intervals calibrated merely because coverage is high.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{\figdir/calibration.pdf}
+\caption{Reliability and calibration. Pooled bins are descriptive because the
+three splits overlap. Bins with 50 or fewer pooled cases are omitted from the
+curve only; all bins remain in the ECE computation and saved CSV.}
+\label{fig:calibration}
+\end{figure}
+
+The local quadrature study's variance underestimation and the benchmark's broad
+rating intervals are not contradictory. One concerns posterior uncertainty over
+parameters in a small controlled problem; the other also includes fixed
+observation noise, discretization and model mismatch. Global-mean ECE is very
+small, yet its RMSE/NLL are poor: matching the frequency of one common class is
+not evidence of useful personalized discrimination.
+
+\section{Related work and revised SOTA positioning}
+Stern, Herbrich and Graepel's Matchbox~\cite{stern2009}, developed at Microsoft
+Research, is our methodological base. It combines latent feature mappings,
+multiple feedback models and hybrid message passing; ADF and cached repeated
+EP supply the central computational comparison. Our code deliberately restricts
+that model to static ID features and fixed global thresholds. We neither use
+Infer.NET nor reproduce its full message schedule, learned thresholds, metadata
+or dynamics. Its published scores use different protocols and are not directly
+comparable to ours.
+
+Lin et al.'s PreRec~\cite{lin2024}, with AWS AI Labs affiliations, is the
+WSDM 2024 anchor retained from M1. It uses a hierarchical Bayesian model with
+neural user/item encoders, domain variables and popularity effects. Training
+optimizes a MAP objective with Adam; zero-shot prediction alters the domain and
+popularity mechanisms. Its XMarket/Online Retail experiments concern
+cross-domain sequential recommendation and ranking metrics. Reported gains
+support the value of modelling transfer and bias in that setting. They do not
+demonstrate that EP is better or provide a MovieLens rating-prediction baseline.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}lXX@{}}\toprule
+Aspect & This M2 study & PreRec anchor\\\midrule
+Target & Predict 1--5 ratings within MovieLens & Transfer next-item preference across domains\\
+Representation & Gaussian traits/biases; fixed ordinal cuts & Hierarchical domain, popularity and neural representations\\
+Learning/inference & Factorized posterior; hybrid ADF/EP-VMP & MAP-trained latent/neural variables; intervention-based scores\\
+Evidence & Paired rating splits; MAE, RMSE, NLL, time & Cross-market/platform ranking and limited-data adaptation\\
+Open issue & Approximation and uncertainty quality & Dependence on representations and assumed bias mechanisms\\\bottomrule
+\end{tabularx}
+\caption{Conceptual comparison, not an empirical head-to-head result. PreRec is
+the selected recent anchor from M1, not a claim to exhaust the 2026 literature.}
+\end{table}
+
+The positioning has therefore become narrower and more defensible since M1:
+M2 establishes an inspectable inference benchmark and exposes its uncertainty
+limitations. It does not establish causal debiasing, cross-domain transfer or a
+new recommendation algorithm. PreRec motivates future questions about what
+additional variables are needed; it is not used as an ornamental citation or
+as an unrun numerical competitor.
+
+\section{Limitations, M3 plan and conclusion}
+The principal limits are fixed thresholds and noise, no metadata in training,
+factorized Gaussian posteriors, approximate product messages, order-dependent
+ADF, only two trait counts and three overlapping random splits. The MF and PGM
+families have not received exhaustive or matched hyperparameter searches. Random
+interaction evaluation can be optimistic for a future or new-user deployment.
+No robustness, causal, cold-start or user-benefit claim follows from the current
+results. Real timings also include implementation-specific advantages from
+Numba-compiled loops.
+
+For M3, we prioritize: (1) validation-only sensitivity studies for priors, noise,
+damping and update order; (2) longer EP runs with stated stopping diagnostics;
+(3) learned user thresholds and metadata with a controlled ablation; (4) true
+user cold-start and reduced-training-density experiments; and (5) uncertainty
+checks and resampling analysis that account for user clustering. These will
+test which conclusions survive beyond this initial configuration.
+
+M2 answers the required technical-foundation question: the representation,
+learning, inference, baselines and KPI pipeline now run end to end on the stated
+benchmark. EP improves on its ADF starting point at a measurable computation and
+memory cost. Its accuracy is close to conventional MF, and its uncertainty
+quality still needs work. The most useful outcome is a reproducible basis for
+those M3 investigations, with the approximations and incomplete work visible.
+
+\FloatBarrier
+\bibliographystyle{plain}
+\bibliography{references}
+
+\appendix
+\section{Reverse messages and executable algorithm}\label{app:derivation}
+Suppose the ordinal factor supplies a Gaussian message
+$\N(y;m_o,v_o)$. Reverse propagation through Gaussian noise gives variance
+$v_o+\beta^2$. If the product output $z_k$ has forward moments $M_k,V_k$,
+then the reverse sum message to that output is
+\begin{align}
+d_k &= m_o-\mu-m^{\setminus n}_{b_u}-m^{\setminus n}_{b_i}
+                  -\sum_{\ell\ne k}M_\ell,\\
+w_k &= v_o+\beta^2+v^{\setminus n}_{b_u}+v^{\setminus n}_{b_i}
+                  +\sum_{\ell\ne k}V_\ell.
+\end{align}
+Substitute $m_z^{\leftarrow}=d_k$ and $v_z^{\leftarrow}=w_k$ in
+Equation~\ref{eq:vmp}. For a bias, omit that bias's own cavity mean and variance
+from the sum and retain all product moments. Its message precision is $1/w_b$
+and weighted mean is $d_b/w_b$. Product forward messages use current local
+marginals as required by the hybrid update; bias-to-sum inputs remain cavities.
+
+The reason Gaussian division works is that
+$\N(x;m,v)\propto\exp(-\lambda x^2/2+\eta x)$. Multiplication adds
+$(\lambda,\eta)$; division subtracts them. The cache invariant in
+Equation~\ref{eq:site_sum} is thus directly testable after any number of passes.
+
+\begin{table}[htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}rX@{}}\toprule
+Step & One EP pass\\\midrule
+1 & Visit training rows in the saved seeded order.\\
+2 & Gather the user's and item's $K$ traits and two biases.\\
+3 & Subtract this row's old natural-parameter sites from the global marginals.\\
+4 & Run the local forward/backward hybrid update with the cavity fixed.\\
+5 & Blend old and proposed sites using the specified outer damping.\\
+6 & Set global marginals to cavity plus replacement, then overwrite the row's sites.\\
+7 & Log numerical failures, local caps, parameter changes and validation KPIs.\\\bottomrule
+\end{tabularx}
+\caption{ADF uses the same local operation once per rating and discards the site cache.}
+\end{table}
+
+\section{Reproducibility and requirement coverage}
+The GitHub-ready folder is named
+\code{M2\_g4\_th\_apl\_recommend-sys\_team}. The root README and the
+Code README give environment setup, quick-demo, validation, full-experiment,
+figure-generation and report-build commands. Raw MovieLens data are not
+redistributed: GroupLens' README requires separate permission for redistribution.
+The downloader, source link and checksums are supplied instead.
+
+\begin{longtable}{@{}p{.28\linewidth}p{.67\linewidth}@{}}
+\toprule Requirement & Submitted evidence\\\midrule\endhead
+Graph and distributions & Section 2; \code{graph.py}; \code{graph\_instance.json}; factor-graph figure\\
+Parameter learning & \code{model.py}: \code{local\_messages}, \code{sweep}; no structure-learning claim\\
+Inference output & \code{predict\_proba}; saved checkpoint; \code{demo.py}\\
+Baseline and benchmark & \code{baselines.py}, \code{data.py}, \code{configs/m2.json}\\
+Mathematical validation & Nine checks in \code{validation.py}; quadrature study and CSV\\
+Initial KPIs & \code{metrics.csv}, \code{summary.csv}, plots and paired differences\\
+Seeds and splits & Saved split indices, split hashes, cold-entity audit\\
+Execution evidence & \code{run.log}, environment JSON, config, core-source hashes\\
+Report source & This PDF, \code{main.tex}, BibTeX and generated tables\\
+Video / presentation & To be supplied by the team, as requested; no completed video is claimed\\
+Individual Google Form & Each member submits separately outside GitHub\\\bottomrule
+\end{longtable}
+
+The source audit used M1 commit
+\code{16a72dc91e1acb3342c411ac264ceb9eeebe9856}. It contained the report,
+draft diagram, READMEs and a Drive video link, but no presentation file or source
+implementation. The linked video's content was not used as technical evidence.
+The M2-specific notice specifies 15 October 2026, while the general guidelines
+list 11 October; this report records the actual 17 October experiment date and
+does not assert on-time submission or an extension.
+
+\section{Team accountability and AI assistance}
+The M1 responsibility plan is retained for review: Jyotier---mathematical model,
+ADF/EP and repository coordination; Tanmay---baselines; Ansh---paper and SOTA
+analysis; Shlok---dataset and metadata; Het---KPIs, experiment tracking and
+documentation. These are inherited assignments, not verified records of who
+completed the M2 work. Members must confirm their actual contributions in the
+individual form; no contribution or signature has been invented here.
+
+Generative AI assisted the implementation, debugging, experiment execution,
+figures and report preparation. Numerical results were produced by the submitted
+code, not invented from expectations or copied from either paper. The team is
+responsible for reviewing the package, reproducing it and explaining its
+mathematics, assumptions and limitations before submission. The accompanying
+\code{TEAM\_REVIEW.md} and \code{DEFENSE\_NOTES.md} identify concrete review
+tasks and explanations; they do not certify that this review has already happened.
+\end{document}

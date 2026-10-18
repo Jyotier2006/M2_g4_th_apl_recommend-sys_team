@@ -1,0 +1,15 @@
+\begin{tabular}{lrrrr}
+\toprule
+Method & MAE $\downarrow$ & RMSE $\downarrow$ & NLL $\downarrow$ & Fit time (s) \\
+\midrule
+Global mean & $0.9342\pm0.0018$ & $1.1174\pm0.0022$ & $1.4558\pm0.0018$ & $0.001\pm0.000$ \\
+User mean & $0.8313\pm0.0019$ & $1.0353\pm0.0020$ & $1.3469\pm0.0014$ & $0.045\pm0.000$ \\
+Item mean & $0.7827\pm0.0029$ & $0.9785\pm0.0037$ & $1.3205\pm0.0039$ & $0.045\pm0.005$ \\
+MF, K=8 & $0.6907\pm0.0029$ & $0.8681\pm0.0031$ & $1.2210\pm0.0033$ & $3.000\pm0.565$ \\
+ADF, K=8 & $0.7101\pm0.0039$ & $0.8980\pm0.0049$ & $1.2520\pm0.0046$ & $2.644\pm0.212$ \\
+EP3, K=8 & $0.6887\pm0.0034$ & $0.8731\pm0.0046$ & $1.2271\pm0.0039$ & $8.187\pm0.421$ \\
+EP5, K=8 & $0.6800\pm0.0029$ & $0.8633\pm0.0040$ & $1.2176\pm0.0032$ & $13.632\pm0.879$ \\
+\midrule
+MF, clipped point & $0.6809\pm0.0029$ & $0.8646\pm0.0031$ & same model & same model \\
+\bottomrule
+\end{tabular}

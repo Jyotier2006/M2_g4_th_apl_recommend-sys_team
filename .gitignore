@@ -1,0 +1,14 @@
+Code/.venv/
+__pycache__/
+*.pyc
+*.nbc
+*.nbi
+*.egg-info/
+Data/raw/
+Results/reproduced*/
+Report/latex/*.aux
+Report/latex/*.bbl
+Report/latex/*.blg
+Report/latex/*.log
+Report/latex/*.out
+Report/latex/main.pdf

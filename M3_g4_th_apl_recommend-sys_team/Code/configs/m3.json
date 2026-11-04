@@ -1,0 +1,19 @@
+{
+  "seeds": [42, 43, 44, 45, 46],
+  "robustness_seeds": [42, 43, 44],
+  "k": 8,
+  "ep_passes": 10,
+  "map_epochs": 25,
+  "gammas": [0.0, 1.0, 10.0, 100.0],
+  "reg": 10.0,
+  "bias_reg": 10.0,
+  "top": 20,
+  "genre_mix": 0.1,
+  "noise_variances": [0.5, 1.0, 2.0],
+  "train_fractions": [0.25, 0.5],
+  "corruption_fractions": [0.1, 0.2],
+  "graph_neighbours": [5, 50],
+  "bootstrap_replicates": 2000,
+  "selection": "MAP checkpoint and gamma: validation clipped RMSE; EP noise: validation NLL; no test selection",
+  "protocol_version": "m3-v1"
+}

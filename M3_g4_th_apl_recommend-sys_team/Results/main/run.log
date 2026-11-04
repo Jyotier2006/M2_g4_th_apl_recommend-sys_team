@@ -1,0 +1,107 @@
+Warming kernels; compilation excluded from fit timing.
+main seed=42 Global: RMSE=1.115984, NLL=1.454677, fit=0.00s
+main seed=42 UserMean: RMSE=1.033225, NLL=1.345451, fit=0.08s
+main seed=42 ItemMean: RMSE=0.974910, NLL=1.316640, fit=0.05s
+main seed=42 MF_SGD: RMSE=0.864637, NLL=1.217536, fit=1.32s
+main seed=42 ADF: RMSE=0.893983, NLL=1.248555, fit=3.24s
+main seed=42 EP1: RMSE=0.893983, NLL=1.248555, fit=4.48s
+main seed=42 EP2: RMSE=0.878955, NLL=1.233693, fit=8.01s
+main seed=42 EP3: RMSE=0.869069, NLL=1.224199, fit=11.54s
+main seed=42 EP4: RMSE=0.863312, NLL=1.218684, fit=14.84s
+main seed=42 EP5: RMSE=0.859476, NLL=1.215012, fit=18.01s
+main seed=42 EP10: RMSE=0.850159, NLL=1.206187, fit=34.89s
+main seed=42 EP5_noise_0.5: RMSE=0.865318, NLL=1.235845, fit=19.69s
+main seed=42 EP5_noise_2: RMSE=0.869479, NLL=1.312835, fit=17.78s
+main seed=42 EP_noise_tuned: RMSE=0.859476, NLL=1.215012, fit=18.01s
+  main seed=42 gamma=0: validation RMSE=0.850498, epoch=20
+  main seed=42 gamma=1: validation RMSE=0.850167, epoch=20
+  main seed=42 gamma=10: validation RMSE=0.848887, epoch=19
+  main seed=42 gamma=100: validation RMSE=0.855438, epoch=25
+main seed=42 MF_MAP: RMSE=0.847626, NLL=1.198079, fit=15.27s
+main seed=42 GMRF_MAP: RMSE=0.846685, NLL=1.197277, fit=13.91s
+main seed=42 Graph_selected: RMSE=0.846685, NLL=1.197277, fit=13.91s
+main seed=43 Global: RMSE=1.119930, NLL=1.457815, fit=0.00s
+main seed=43 UserMean: RMSE=1.037098, NLL=1.348116, fit=0.06s
+main seed=43 ItemMean: RMSE=0.982322, NLL=1.324461, fit=0.05s
+main seed=43 MF_SGD: RMSE=0.868574, NLL=1.221376, fit=1.41s
+main seed=43 ADF: RMSE=0.903388, NLL=1.257190, fit=3.33s
+main seed=43 EP1: RMSE=0.903388, NLL=1.257190, fit=4.12s
+main seed=43 EP2: RMSE=0.889309, NLL=1.242710, fit=7.15s
+main seed=43 EP3: RMSE=0.878140, NLL=1.231593, fit=10.10s
+main seed=43 EP4: RMSE=0.871651, NLL=1.225219, fit=13.04s
+main seed=43 EP5: RMSE=0.867462, NLL=1.221135, fit=16.10s
+main seed=43 EP10: RMSE=0.857594, NLL=1.211575, fit=30.74s
+main seed=43 EP5_noise_0.5: RMSE=0.873712, NLL=1.246722, fit=16.35s
+main seed=43 EP5_noise_2: RMSE=0.877300, NLL=1.316599, fit=14.84s
+main seed=43 EP_noise_tuned: RMSE=0.867462, NLL=1.221135, fit=16.10s
+  main seed=43 gamma=0: validation RMSE=0.845433, epoch=25
+  main seed=43 gamma=1: validation RMSE=0.845127, epoch=25
+  main seed=43 gamma=10: validation RMSE=0.844048, epoch=25
+  main seed=43 gamma=100: validation RMSE=0.851658, epoch=25
+main seed=43 MF_MAP: RMSE=0.853231, NLL=1.203904, fit=13.69s
+main seed=43 GMRF_MAP: RMSE=0.852851, NLL=1.203739, fit=12.40s
+main seed=43 Graph_selected: RMSE=0.852851, NLL=1.203739, fit=12.40s
+main seed=44 Global: RMSE=1.116365, NLL=1.454882, fit=0.00s
+main seed=44 UserMean: RMSE=1.035604, NLL=1.347191, fit=0.05s
+main seed=44 ItemMean: RMSE=0.978324, NLL=1.320469, fit=0.06s
+main seed=44 MF_SGD: RMSE=0.871258, NLL=1.224474, fit=1.43s
+main seed=44 ADF: RMSE=0.896501, NLL=1.250235, fit=3.59s
+main seed=44 EP1: RMSE=0.896501, NLL=1.250235, fit=4.35s
+main seed=44 EP2: RMSE=0.881374, NLL=1.234885, fit=7.40s
+main seed=44 EP3: RMSE=0.871966, NLL=1.225591, fit=10.84s
+main seed=44 EP4: RMSE=0.866483, NLL=1.220216, fit=14.26s
+main seed=44 EP5: RMSE=0.862902, NLL=1.216748, fit=17.37s
+main seed=44 EP10: RMSE=0.855072, NLL=1.209412, fit=33.07s
+main seed=44 EP5_noise_0.5: RMSE=0.866878, NLL=1.235768, fit=17.58s
+main seed=44 EP5_noise_2: RMSE=0.873506, NLL=1.314032, fit=15.83s
+main seed=44 EP_noise_tuned: RMSE=0.862902, NLL=1.216748, fit=17.37s
+  main seed=44 gamma=0: validation RMSE=0.850905, epoch=24
+  main seed=44 gamma=1: validation RMSE=0.850623, epoch=23
+  main seed=44 gamma=10: validation RMSE=0.849796, epoch=21
+  main seed=44 gamma=100: validation RMSE=0.857985, epoch=25
+main seed=44 MF_MAP: RMSE=0.851253, NLL=1.201350, fit=15.57s
+main seed=44 GMRF_MAP: RMSE=0.850761, NLL=1.201075, fit=17.13s
+main seed=44 Graph_selected: RMSE=0.850761, NLL=1.201075, fit=17.13s
+main seed=45 Global: RMSE=1.114875, NLL=1.454287, fit=0.00s
+main seed=45 UserMean: RMSE=1.033474, NLL=1.345652, fit=0.05s
+main seed=45 ItemMean: RMSE=0.978648, NLL=1.321525, fit=0.05s
+main seed=45 MF_SGD: RMSE=0.868934, NLL=1.222161, fit=1.35s
+main seed=45 ADF: RMSE=0.898242, NLL=1.252292, fit=3.42s
+main seed=45 EP1: RMSE=0.898242, NLL=1.252292, fit=4.53s
+main seed=45 EP2: RMSE=0.884051, NLL=1.238105, fit=8.00s
+main seed=45 EP3: RMSE=0.874294, NLL=1.228653, fit=11.40s
+main seed=45 EP4: RMSE=0.867727, NLL=1.222349, fit=15.24s
+main seed=45 EP5: RMSE=0.863196, NLL=1.218004, fit=18.41s
+main seed=45 EP10: RMSE=0.854394, NLL=1.209573, fit=33.78s
+main seed=45 EP5_noise_0.5: RMSE=0.867558, NLL=1.237912, fit=18.00s
+main seed=45 EP5_noise_2: RMSE=0.874773, NLL=1.315969, fit=18.18s
+main seed=45 EP_noise_tuned: RMSE=0.863196, NLL=1.218004, fit=18.41s
+  main seed=45 gamma=0: validation RMSE=0.848821, epoch=25
+  main seed=45 gamma=1: validation RMSE=0.848539, epoch=25
+  main seed=45 gamma=10: validation RMSE=0.847565, epoch=25
+  main seed=45 gamma=100: validation RMSE=0.855182, epoch=25
+main seed=45 MF_MAP: RMSE=0.850976, NLL=1.201949, fit=20.32s
+main seed=45 GMRF_MAP: RMSE=0.850474, NLL=1.201571, fit=15.36s
+main seed=45 Graph_selected: RMSE=0.850474, NLL=1.201571, fit=15.36s
+main seed=46 Global: RMSE=1.114673, NLL=1.454210, fit=0.00s
+main seed=46 UserMean: RMSE=1.031668, NLL=1.344119, fit=0.06s
+main seed=46 ItemMean: RMSE=0.978612, NLL=1.321527, fit=0.05s
+main seed=46 MF_SGD: RMSE=0.868216, NLL=1.221680, fit=1.41s
+main seed=46 ADF: RMSE=0.896523, NLL=1.251307, fit=3.07s
+main seed=46 EP1: RMSE=0.896523, NLL=1.251307, fit=4.08s
+main seed=46 EP2: RMSE=0.883731, NLL=1.238454, fit=6.98s
+main seed=46 EP3: RMSE=0.876569, NLL=1.231424, fit=11.06s
+main seed=46 EP4: RMSE=0.872085, NLL=1.227065, fit=15.34s
+main seed=46 EP5: RMSE=0.868640, NLL=1.223743, fit=21.56s
+main seed=46 EP10: RMSE=0.856800, NLL=1.212290, fit=47.50s
+main seed=46 EP5_noise_0.5: RMSE=0.872244, NLL=1.245904, fit=29.41s
+main seed=46 EP5_noise_2: RMSE=0.876312, NLL=1.317752, fit=45.33s
+main seed=46 EP_noise_tuned: RMSE=0.868640, NLL=1.223743, fit=21.56s
+  main seed=46 gamma=0: validation RMSE=0.848782, epoch=25
+  main seed=46 gamma=1: validation RMSE=0.848541, epoch=25
+  main seed=46 gamma=10: validation RMSE=0.847355, epoch=25
+  main seed=46 gamma=100: validation RMSE=0.854330, epoch=25
+main seed=46 MF_MAP: RMSE=0.849795, NLL=1.200674, fit=18.85s
+main seed=46 GMRF_MAP: RMSE=0.848889, NLL=1.199688, fit=13.60s
+main seed=46 Graph_selected: RMSE=0.848889, NLL=1.199688, fit=13.60s
+Completed: /workspace/scratch/88c05d49406a/m3_build/M3_g4_th_apl_recommend-sys_team/Results/main

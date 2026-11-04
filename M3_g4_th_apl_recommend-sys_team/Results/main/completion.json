@@ -1,0 +1,12 @@
+{
+  "complete": true,
+  "metric_rows": 85,
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "stage": "main"
+}

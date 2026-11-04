@@ -66,4 +66,3 @@ EP is approximate; MAP probabilities use validation-fitted residual noise rather
 than a full parameter posterior. Exact/Gibbs results are explicitly labelled as
 small Gaussian diagnostics. Matchbox is the implementation anchor and PreRec is
 a conceptual research-lab reference; neither full system is reproduced here.
-Generative-AI assistance and all material limitations are disclosed in the report.

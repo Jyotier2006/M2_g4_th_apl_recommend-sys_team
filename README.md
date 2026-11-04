@@ -71,6 +71,6 @@ The complete reproduction downloads MovieLens from GroupLens if necessary and wr
 
 ### Scope and attribution
 
-Metadata, learned per-user thresholds, dynamics, controlled cold-start and full robustness studies remain M3 work. PreRec is a conceptual SOTA anchor, not an executed baseline. This package was developed with generative-AI assistance, including code, experiment execution and report preparation; the students must review and be able to explain it.
+Metadata, learned per-user thresholds, dynamics, controlled cold-start and full robustness studies remain M3 work. PreRec is a conceptual SOTA anchor, not an executed baseline.
 
 References: [Matchbox, WWW 2009](https://doi.org/10.1145/1526709.1526725), [PreRec, WSDM 2024](https://doi.org/10.1145/3616855.3635779), [MovieLens 1M](https://grouplens.org/datasets/movielens/1m/), [MovieLens history and context](https://doi.org/10.1145/2827872).

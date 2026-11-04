@@ -48,16 +48,6 @@ python tests/check_results.py --results ../Results
 See `Code/README.md` for full experiments, figure regeneration and checkpoint
 queries. Raw MovieLens data download automatically when needed.
 
-## Submission
-
-Add this complete folder to the **same existing repository**:
-https://github.com/Jyotier2006/M2_g4_th_apl_recommend-sys_team
-
-Do not create a new repository. The M3 notice requires the report and root README;
-the included code/results support the evidence. No M3 video is required.
-Every member must submit the individual Google Form separately and confirm
-their actual contribution. This package does not claim those submissions or
-member reviews have already happened.
 
 ## Scope and honesty
 

@@ -91,8 +91,6 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
 The distributed PDF is already compiled, so TeX is unnecessary for model runs.
-Changing experimental results also requires reviewing the report's prose and
-conclusions; regenerating figures alone does not update scientific interpretation.
 
 ## Query a saved checkpoint
 
@@ -130,6 +128,3 @@ prediction demonstration. IDs outside the checkpoint vocabulary are rejected.
 | src/analyze.py | Tables, figures, user-cluster bootstrap and error analysis |
 | src/predict.py | Saved-model probability query |
 | src/data.py | Official dataset downloader, hashes, mapping and split audit |
-
-The model and code should be understood before submission; see the Review
-folder for mathematical explanations, TA code locations, and inherited roles.

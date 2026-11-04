@@ -27,5 +27,4 @@ reproducing conditional user-bootstrap intervals without distributing raw rating
 or all prediction vectors. Split permutations can be regenerated from the recorded
 seeds and verified against their hashes. Raw MovieLens files are not bundled.
 
-See Code/README.md for exact reproduction and analysis commands. Changing runs
-requires rechecking the written scientific interpretation as well as figures.
+See Code/README.md for exact reproduction and analysis commands.

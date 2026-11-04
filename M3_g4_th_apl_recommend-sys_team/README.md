@@ -35,7 +35,7 @@ These are real-data runs, not the earlier synthetic offline demo.
 | Code | Procedural source, configurations, meaningful validation checks and run instructions |
 | Data | Official dataset source, preparation and field mapping; no raw ratings bundled |
 | Results | Raw metrics, traces, audits, logs, checkpoints, summaries, bootstrap intervals and plots |
-| Review | M2-to-M3 changes, guideline coverage, viva explanations, code locations and inherited team roles |
+| Review | M2-to-M3 changelog: how each piece of M2 feedback was addressed |
 
 Quick start from `Code`:
 
@@ -48,11 +48,11 @@ python tests/check_results.py --results ../Results
 See `Code/README.md` for full experiments, figure regeneration and checkpoint
 queries. Raw MovieLens data download automatically when needed.
 
-
-## Scope and honesty
+## Scope and limitations
 
 The graph is a proper Gaussian Markov prior, not a causal graph or neural network.
 EP is approximate; MAP probabilities use validation-fitted residual noise rather
 than a full parameter posterior. Exact/Gibbs results are explicitly labelled as
 small Gaussian diagnostics. Matchbox is the implementation anchor and PreRec is
 a conceptual research-lab reference; neither full system is reproduced here.
+Further limitations are discussed in the report.

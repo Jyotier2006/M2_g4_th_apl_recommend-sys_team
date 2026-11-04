@@ -14,6 +14,5 @@ To rebuild after generating analysis figures, enter `latex` and run:
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-The report imports plots from `../../Results/analysis/plots`; keep the package
-folder structure intact. A new experiment run requires reviewing the narrative,
-not only regenerating numerical tables.
+The report imports plots from `../../Results/analysis/plots`; keep the folder
+structure intact.

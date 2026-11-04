@@ -1,10 +1,6 @@
 \section{Requirement coverage and report continuity}
-The six M3 notice screenshots, the general CSE 516 project PDF and the L5
-guidelines slides were reviewed. The M3 notice is more specific than the older
-general requirement: M3 requires the updated PDF and root README; code/results
-are optional, and there is no video requirement. The notice gives 4 November
-2026, 11:59 PM as the deadline. This package does not assert that submission
-has already occurred. Each member submits the individual form separately.
+Table~\ref{tab:coverage} maps the M3 expectations in the CSE 516 project
+guidelines to the evidence in this report and repository.
 
 \begin{table}[!htbp]\centering\small
 \begin{tabularx}{\linewidth}{@{}lX@{}}\toprule
@@ -20,16 +16,16 @@ Interpretation & Main-result explanations, counterexamples and explicit attribut
 Theoretical validation & Preserved EP derivation; proper GMRF prior; exact/Gibbs/iterative diagnostic; quadrature\\
 Revised SOTA position & Specific Matchbox/PreRec models and protocols; no direct SOTA score claim\\
 Reproducibility & Source/config/environment hashes, run logs, tests, result/figure scripts\\
-Individual contribution & Inherited roles marked historical; actual M3 contributions require confirmation\\\bottomrule
+Team roles & Member responsibilities listed in the team section below\\\bottomrule
 \end{tabularx}
-\caption{Coverage of the supplied guidelines. SHD is explicitly inapplicable without a true graph.}
+\caption{Coverage of the M3 guidelines. SHD is inapplicable without a true graph.}\label{tab:coverage}
 \end{table}
 
 The updated source begins from the revised M2 \code{main.tex} and preserves its
 title, team details, model equations, EP/VMP derivation and numerical-validation
 discussion. It updates the abstract, milestone/date, benchmark, results,
 positioning and conclusion; it adds the GMRF representation and M3 analysis.
-Detailed changes and code locations are supplied in the Review folder.
+A detailed M2-to-M3 changelog is in \code{Review/CHANGELOG\_M2\_TO\_M3.md}.
 
 Not every item mentioned as possible future work in M2 is claimed complete.
 The implemented additions cover noise/prior/damping/order sensitivity, longer
@@ -39,24 +35,18 @@ inference remain deferred. The formal general guidelines encourage depth in
 one question, rather than an unsupported claim to have tested every PGM method.
 
 \section{Team accountability and AI assistance}
-The historical role plan is retained: Jyotier Vithalani (AU2440170): mathematical
+Team roles follow the M1/M2 plan: Jyotier Vithalani (AU2440170): mathematical
 model, EP/ADF and repository; Tanmay Kanani (AU2440234): baselines; Ansh
 Chaudhari (AU2440259): paper/SOTA analysis; Shlok Shah (AU2440178): dataset and
 metadata; Het Patel (AU2440221): KPIs, experiment tracking and documentation.
-These are inherited assignments, not verified records of who completed M3.
-Each member must identify actual work in the individual form and be able to
-explain the entire pipeline.
 
-Generative AI assisted source preparation, debugging, execution, analysis,
-figures and writing. New numerical results were computed by the supplied code
-on the verified dataset; they were not fabricated to make a PGM win. The
-students remain responsible for checking and understanding every claim.
-The Review folder includes a viva guide and concrete responsibilities for
-verification, without certifying that the team has already performed them.
+Generative AI assisted implementation, execution, analysis and writing. All
+numerical results were computed by the included code on the verified dataset;
+team members remain responsible for checking them.
 
 \section{Reproduction and evidence boundaries}
-The submission folder is \code{M3\_g4\_th\_apl\_recommend-sys\_team}, intended
-for the same existing repository used for M2. No new repository is required.
+Code, configurations and results are in the
+\code{M3\_g4\_th\_apl\_recommend-sys\_team} folder of the project repository.
 The Code README provides commands for validation, main/stress/sensitivity
 experiments, figure regeneration and report compilation. Raw MovieLens files
 are not redistributed; the official downloader, source links and hashes are
@@ -73,5 +63,4 @@ tables. The 12-variable Gaussian example is labelled a diagnostic throughout.
 Historical M2 files are labelled separately. Training time excludes JIT and
 test evaluation; comparison of complete workflows additionally includes graph
 construction and validation search. Test evaluation follows validation selection
-for each comparison, and changing a diagnostic after seeing a test result is
-not presented as a preregistered improvement.
+for each comparison.

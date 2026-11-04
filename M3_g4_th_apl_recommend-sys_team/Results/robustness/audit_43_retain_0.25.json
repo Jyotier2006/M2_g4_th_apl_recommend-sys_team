@@ -1,0 +1,12 @@
+{
+  "train_rows": 200041,
+  "test_rows": 100022,
+  "train_row_hash": "8bfc96e98527c8c20d7c2a8ce5d72949e86bac46ac7cc68632d75023cf61fefc",
+  "train_label_hash": "f28fc52ea8764b6897572cdbc5ecbe20eadbe0a5dc1b82859cd9ad23ad0cc186",
+  "corrupted_labels": 0,
+  "retained_fraction": 0.25,
+  "noise_fraction": 0.0,
+  "top": 20,
+  "genre_mix": 0.1,
+  "graph_inputs": "condition training ratings and fixed genres only"
+}

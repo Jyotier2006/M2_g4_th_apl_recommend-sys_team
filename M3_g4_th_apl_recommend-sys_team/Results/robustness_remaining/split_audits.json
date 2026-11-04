@@ -1,0 +1,26 @@
+[
+  {
+    "seed": 44,
+    "protocol": "random interaction 80/10/10; no chronological or user cold-start claim",
+    "split_hashes": {
+      "train": "134c3acc6e96098aa8e563cf33aff3e9d92f2eb620c39245664401f86f604079",
+      "validation": "da5716eb4a6b9315098a7d339d7a495aba2909a7cae90d252037215cd4c30b3e",
+      "test": "00d86c01233e6ce6de0ed8de606cec14e1cf095869f13d6aabcfaaa1b64dc51f"
+    },
+    "counts": {
+      "train": 800167,
+      "validation": 100020,
+      "test": 100022
+    },
+    "heldout_cold_counts": {
+      "validation": {
+        "user": 0,
+        "item": 14
+      },
+      "test": {
+        "user": 0,
+        "item": 13
+      }
+    }
+  }
+]

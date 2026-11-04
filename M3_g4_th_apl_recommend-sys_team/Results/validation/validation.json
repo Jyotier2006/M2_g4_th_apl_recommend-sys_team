@@ -1,0 +1,9 @@
+{
+  "gauss_seidel_matches_exact": true,
+  "proper_precision": true,
+  "laplacian_pair_factor_identity": true,
+  "bilinear_converged": true,
+  "bilinear_iterations": 50,
+  "max_quadrature_change": 1.0383671700253672e-10,
+  "scope": "Small Gaussian and one-observation ordinal diagnostics only; not full-data exact inference."
+}

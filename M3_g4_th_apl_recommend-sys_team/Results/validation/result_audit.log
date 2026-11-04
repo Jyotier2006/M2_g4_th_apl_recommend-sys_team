@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "metric_rows": 229,
+  "main_rows": 85,
+  "main_seeds": 5,
+  "robustness_conditions_per_seed": 10,
+  "robustness_seeds": 3,
+  "sensitivity_rows": 18,
+  "checks": [
+    "complete coverage",
+    "no duplicate rows",
+    "finite KPIs",
+    "validation-only recorded selection",
+    "MAP objective nonincrease",
+    "ADF/EP1 equality",
+    "noise selection",
+    "main source hashes"
+  ]
+}

@@ -1,0 +1,123 @@
+\section{Updated benchmark, baselines and experimental protocol}
+\subsection{Dataset and code representation}
+MovieLens 1M~\cite{movielens,harper2015} contains 1,000,209 ratings, 6,040 users
+and 3,706 rated movies; its metadata catalogue has 3,883 movies. SHA-256 checks
+verify the official archive and all three input files. Rating density is
+4.468\%; absent user--movie pairs are unobserved, never zero-star labels.
+
+\begin{table}[!htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}p{.23\linewidth}XX@{}}\toprule
+File / field & Meaning & Representation / use\\\midrule
+ratings: UserID, MovieID & Raw entity identifiers & Zero-based arrays \code{u}, \code{i}; mappings \code{uid}, \code{iid}\\
+ratings: Rating & Observed integer, 1--5 & Target array \code{r}; train/validation/test separated\\
+ratings: Timestamp & Unix observation time & Audited; no temporal predictor or chronological claim\\
+movies: MovieID, Title & Identifier and display name & ID joins; titles are not numeric features\\
+movies: Genres & Pipe-separated genre labels & 18-column multi-hot matrix used only for graph construction\\
+users: UserID & User identifier & Join/audit only beyond the rating ID\\
+users: Gender, Age & Recorded demographic category, age bin & Parsed/audited; excluded from prediction\\
+users: Occupation, Zip-code & Occupation category and postal code & Parsed/audited; excluded from prediction\\\bottomrule
+\end{tabularx}
+\caption{All dataset fields and their actual uses. IDs are categories, not numerical magnitudes.}
+\end{table}
+
+At $K=8$, each user and each movie has eight unnamed learned traits plus one
+bias: $(6040+3706)(8+1)=87,714$ persistent scalar latent parameters.
+The eight coordinates are not predefined genres. EP stores two natural
+parameters per scalar plus per-rating sites. GMRF adds fixed graph weights;
+the count above excludes observations, deterministic auxiliary variables,
+hyperparameters, and EP site-cache entries.
+
+\subsection{Common evaluation and validation-only selection}
+Five seeds (42--46) each define 800,167 training, 100,020 validation and
+100,022 test rows through one seeded random permutation. All compared methods
+use the same rows within a seed. Seeds control split/order and initialization;
+42 has no special statistical meaning. The first three splits reproduce the
+M2 protocol. Results from this fresh execution are reported together; old M2
+timings are not mixed with current timings.
+
+\textbf{Baseline families.} Global/user/item frequency predictors use the M2
+smoothed class-histogram rules. MF-SGD retains the M2 kernel, $K=8$,
+learning rate 0.007, epoch decay 0.98, regularization 0.03 and 25 epochs.
+MF-MAP and GMRF-MAP use the same alternating solver with and without the
+graph factor. The two MF optimizers use different objectives/regularization
+conventions, so their numerical regularization values are not interchangeable.
+
+\textbf{EP family.} ADF and EP1--5 share the original priors and hybrid local
+updates; EP10 studies a larger budget. EP1, EP2, etc. mean the number of passes,
+not different models. An additional experiment fits EP5 at observation
+variances $\beta^2\in\{0.5,1,2\}$; validation NLL selects the noise candidate.
+All fixed candidates are also reported to reveal sensitivity.
+
+\textbf{Graph family.} The clean-data search uses
+$\gamma\in\{0,1,10,100\}$ and 25 epochs per candidate. Validation clipped-score
+RMSE selects the checkpoint and graph strength. \code{GMRF\_MAP} reports the
+best positive strength as a graph diagnostic; \code{Graph\_selected} permits
+$\gamma=0$, so a deployment choice can switch the graph off. MF-MAP is the
+matching $\gamma=0$ ablation. Every candidate uses the same initialization and
+epoch budget. The Gaussian prediction scale is then fitted on validation NLL.
+No test metric enters these selection functions.
+
+\subsection{Robustness, ablations and noise}
+Three seeds (42--44) are used for controlled stress tests, with validation and
+test labels kept clean. Two different meanings of noise are examined:
+\emph{assumed observation variance} inside EP and \emph{corruption of observed
+training labels}. They answer different questions.
+
+\begin{table}[!htbp]\centering\small
+\begin{tabularx}{\linewidth}{@{}lXX@{}}\toprule
+Experiment & Change & Fixed comparison / interpretation\\\midrule
+Training availability & Retain 25\%, 50\%, 100\% of training rows & Nested seeded subsets; identical held-out rows; random missingness only\\
+Label noise & Replace exactly 10\% or 20\% of training ratings by a uniformly selected different star & Same corruption for every method; graphs rebuilt from corrupted training data\\
+Graph density & Top 5, 20 or 50 outgoing neighbours & Same mixture/regularization; symmetrized final degree can be larger\\
+Feature ablation & Ratings only, genres only, mixed graph & Distinguishes information sources; no test-derived similarities\\
+Entity cold-start & Separately remove all training rows of 10\% of item/user identities & Evaluate only those entities' original test rows; item genres remain available\\
+Inference sensitivity & Prior variance 0.1/0.5, damping 0.25/1, reshuffled order & EP5 against original settings, three seeds; no claim of exhaustive tuning\\\bottomrule
+\end{tabularx}
+\caption{Controlled experiments. Clean curves use the same three seeds as their stress conditions.}
+\end{table}
+
+For stress tests, the graph strength is fixed at 10, the candidate retained from
+the clean-validation comparisons, and compared with $\gamma=0$; checkpoints
+still use validation within 25 epochs. This tests robustness of that operating
+setting rather than repeatedly optimizing the full grid on every condition.
+The cold-start checkpoint criterion uses the full original validation
+split, while its reported test metric uses only withheld items or users.
+Missingness is uniform over observed training ratings, not a model of
+nonrandom exposure. No ratings are generated to fill missing entries.
+
+\subsection{KPIs, confidence intervals and reproducibility}
+For probabilities $p_{nr}$, $\hat r_n=\sum_{r=1}^5rp_{nr}$.
+\begin{align}
+\mathrm{RMSE}&=\sqrt{N^{-1}\sum_n(\hat r_n-r_n)^2},&
+\mathrm{MAE}&=N^{-1}\sum_n|\hat r_n-r_n|,\\
+\mathrm{NLL}&=-N^{-1}\sum_n\log p_{n,r_n},&
+\mathrm{Brier}&=N^{-1}\sum_n\sum_{r=1}^5(p_{nr}-\mathbf1\{r=r_n\})^2.
+\end{align}
+Top-class accuracy compares $\arg\max_r p_{nr}$ with the observed star, not a
+rounded expectation. ECE uses ten equal-width top-confidence bins and their
+weighted absolute confidence--accuracy gaps. Lower RMSE, MAE, NLL, Brier and
+ECE are better. RMSE 0.85 is an error in star units, not 85\% accuracy.
+We also retain 90\% equal-tail interval coverage/width and prediction time.
+
+Main tables report mean $\pm$ sample SD across five seeds; robustness uses
+three. Since random splits overlap, we do not treat five seed scores as five
+independent datasets or use a naive t-test to certify significance. Instead,
+within each split, 2,000 paired bootstrap replicates resample users with
+replacement, retaining all that user's test ratings for both models. Intervals
+refer to the difference in rating-weighted RMSE (baseline minus comparison).
+They are conditional on fitted models, do not include retraining uncertainty,
+and do not account for dependence through shared items. Several comparisons
+are exploratory; no familywise discovery claim is made.
+
+No true movie-dependency graph is available, so SHD/SID and edge-recovery
+precision are not meaningful target KPIs here. We report graph size/density,
+predictive error, probability quality and energy instead. A small known
+Gaussian model separately permits exact inference error comparisons.
+
+Execution uses sequential CPU kernels, numerical threads set to one, and JIT
+warm-up before timing. Software versions, configurations, split hashes, source
+hashes, full logs and raw result tables are supplied. MAP/SGD fit times include
+validation checkpointing and scale fitting; EP fit times exclude validation
+scoring. Graph construction and complete search cost are reported separately.
+Thus wall times describe this implementation and machine, not an algorithmic
+speed theorem. Regenerating all runs and figures is documented in the Code README.

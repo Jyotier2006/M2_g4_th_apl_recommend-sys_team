@@ -1,0 +1,41 @@
+\section{Limitations and conclusion}
+The model is static and evaluated through random interactions, not future
+recommendations. Learned latent coordinates are not uniquely identifiable
+semantic traits. EP retains a factorized approximation and cannot represent
+all posterior correlations. Its moment and convergence checks validate
+specific properties rather than global exactness. GMRF-MAP uses point
+estimates, and its fitted residual scale does not recover Bayesian parameter
+uncertainty. Similarity edges can be wrong, particularly under sparse or
+corrupted observations; neither genres nor correlations establish causality.
+
+The parameter searches are finite and not an exhaustive optimum comparison.
+Several selected checkpoints reach the budget boundary. SGD and MAP have
+different regularization conventions, and the EP/MAP likelihoods differ.
+Changing them jointly is useful for a system comparison but does not isolate
+the graph. Confidence intervals are conditional on fitted models and resample
+users only; overlapping splits and shared-item dependence restrict the scope
+of significance claims. Missingness/corruption are controlled artificial stress
+mechanisms, not a full model of actual user reporting or exposure bias.
+
+M3 answers the M2 feedback with multiple fitting/inference approaches, a
+mathematically specified Markov network, matched ablations, explicit noise
+experiments, probability-quality measures and statistical interpretation.
+On the main benchmark, GMRF-MAP's RMSE is $0.8499\pm0.0023$, versus
+$0.8643\pm0.0037$ for EP5 and $0.8548\pm0.0029$ for EP10. The comparison that
+isolates the graph is much closer: $0.8506\pm0.0021$ without it versus
+$0.8499\pm0.0023$ with it. The observed graph gain is therefore modest,
+with split-dependent statistical support, while its benefit is more visible
+in some stress conditions.
+
+The defensible explanation is that the pairwise prior can share evidence
+between related movies and reduce estimation variance, while excessive or
+unhelpful connections introduce bias. This mechanism and the matched ablation
+support a qualified improvement claim; they do not imply that any Markov or
+Bayesian network will improve any recommender. Repeated EP likewise improves
+prediction without uniformly improving calibration. The project's contribution
+is the reproducible evidence about these trade-offs and limitations.
+
+Next steps are learned user-specific thresholds, chronological evaluation,
+better treatment of nonrandom missingness, broader validation-only tuning,
+and a posterior approximation that retains graph-related covariance. These
+are proposed extensions, not completed experiments or claims in this submission.

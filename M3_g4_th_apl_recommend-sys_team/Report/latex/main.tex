@@ -1,0 +1,302 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[margin=21mm,headheight=16pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,booktabs,tabularx,graphicx}
+\usepackage{enumitem,fancyhdr,caption,placeins}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=black,citecolor=black]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{2em}
+\setlist{nosep,leftmargin=1.4em}
+\captionsetup{font=small,labelfont=bf}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.85}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small CSE 516 -- Milestone 3}
+\fancyhead[R]{\small Group 4}
+\fancyfoot[C]{\thepage}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\N}{\mathcal N}
+\newcommand{\code}[1]{\texttt{#1}}
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+{\large\bfseries 1. Title Page}\par
+\vspace{17mm}
+\begin{center}
+{\Large\bfseries Ahmedabad University}\par
+\vspace{3mm}
+{\Large\bfseries CSE 516 -- Probabilistic Graphical Models}\par
+\vspace{5mm}
+{\large Milestone 3: Results and Analysis}\par
+\vspace{15mm}
+{\fontsize{18}{22}\selectfont\bfseries Bayesian Personalized Recommendation using\\[3pt]
+Latent Trait Models \& Expectation Propagation}\par
+\vspace{5mm}
+{\large\bfseries Category: Theoretical AI}\par
+\vspace{2mm}
+{\large\bfseries Group 4}\par
+\vspace{10mm}
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{ll}\toprule
+\textbf{AU ID} & \textbf{Student Name}\\\midrule
+AU2440170 & Jyotier Vithalani\\
+AU2440234 & Tanmay Kanani\\
+AU2440259 & Ansh Chaudhari\\
+AU2440178 & Shlok Shah\\
+AU2440221 & Het Patel\\\bottomrule
+\end{tabular}
+\vfill
+\textbf{GitHub Repository}\par
+\vspace{2mm}
+{\small\url{https://github.com/Jyotier2006/M2_g4_th_apl_recommend-sys_team}}\par
+\vspace{10mm}
+\textbf{Submission Date:} 4 November 2026\par
+\vspace{4mm}
+\end{center}
+\end{titlepage}
+\setcounter{page}{1}
+\setcounter{section}{1}
+
+\section*{Abstract}
+We extend the existing M2 study of a restricted static Matchbox recommender
+with systematic full-data experiments and an explicit Gaussian Markov movie
+prior. Across five MovieLens 1M splits, ADF, EP5 and EP10 achieve expected-rating
+RMSE $0.8977\pm0.0035$, $0.8643\pm0.0037$ and $0.8548\pm0.0029$.
+GMRF-MAP achieves $0.8499\pm0.0023$, but its matched graph-free MAP baseline
+already reaches $0.8506\pm0.0021$: the isolated graph gain is modest.
+Paired user-bootstrap intervals support a reduction in four of five splits;
+one includes zero. Repeated EP improves NLL while worsening ECE, and changing
+observation noise does not uniformly improve probability quality.
+Missing-data, corrupted-label, graph-density, metadata and cold-start tests
+probe robustness. Exact Gaussian and numerical quadrature diagnostics expose
+what the approximations preserve and lose. These results position the project
+as an inference and regularization study, not a full Matchbox/PreRec
+reproduction or a state-of-the-art claim.
+
+\section{Problem and cumulative progress from M1/M2}
+Sparse user--item ratings leave uncertainty about both preferences and item
+characteristics. A latent-trait graphical model shares evidence across ratings
+through common user and item parameters, while Bayesian learning retains
+uncertainty about those parameters. Our original theoretical question remains:
+\emph{how do ADF and repeated EP differ in predictive quality, uncertainty,
+computation and memory?} M3 adds: \emph{does an explicit movie Markov prior
+improve a matching matrix-factorization model, and under which conditions?}
+
+This is an update of the M2 report. The project identity, latent-trait model,
+EP/VMP equations and validation foundation are retained. M3 expands the
+benchmark to five seeds, adds MAP and graph ablations, studies both assumed
+noise and corrupted observations, and replaces the preliminary conclusion
+with evidence from measured runs. The earlier synthetic offline demo is not
+used as MovieLens evidence. The original M2 result files remain separately
+labelled for provenance.
+
+The work retains the Theoretical AI track with recommendation as its benchmark.
+The new graph is constructed from training similarities, not learned through
+causal structure discovery. User-specific thresholds and temporal dynamics
+remain outside the implemented scope. We compare several meaningful approaches;
+we do not claim to test every possible PGM algorithm.
+
+\section{Probabilistic representation}
+For user $u$ and item $i$, let $s_u,t_i\in\mathbb R^K$ denote latent traits and
+$b_u,b_i$ denote biases. For each observed pair $(u,i)\in\mathcal D$,
+\begin{align}
+z_{uik}&=s_{uk}t_{ik}, &
+a_{ui}&=\mu+b_u+b_i+\sum_{k=1}^{K}z_{uik},\label{eq:affinity}\\
+y_{ui}\mid a_{ui}&\sim\N(a_{ui},\beta^2), &
+R_{ui}=r&\iff c_{r-1}<y_{ui}\leq c_r.\label{eq:ordinal}
+\end{align}
+Only the rating is observed. The cuts are
+$c=(-\infty,1.5,2.5,3.5,4.5,+\infty)$; $\mu$ is the training mean, treated as
+fixed. Independent priors are
+\begin{equation}
+s_{uk}\sim\N(m^0_{uk},0.25),\quad t_{ik}\sim\N(n^0_{ik},0.25),\quad
+b_u,b_i\sim\N(0,1).
+\end{equation}
+Trait prior means are sampled once from $\N(0,0.1^2)$ using the run seed. This
+breaks bilinear sign symmetry without using held-out ratings.
+
+With $\Theta=(S,T,b_U,b_I)$, the joint factorization is
+\begin{equation}
+\begin{aligned}
+p(\Theta,Z,A,Y,R)=p(\Theta)\prod_{(u,i)\in\mathcal D}
+&\left[\prod_k\delta(z_{uik}-s_{uk}t_{ik})\right]\\[-2pt]
+&\times\delta\!\left(a_{ui}-\mu-b_u-b_i-\sum_k z_{uik}\right)\\[-2pt]
+&\times\N(y_{ui};a_{ui},\beta^2)
+\mathbf1\{c_{R_{ui}-1}<y_{ui}\le c_{R_{ui}}\}.
+\end{aligned}\label{eq:joint}
+\end{equation}
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\linewidth]{figures/factor_graph.pdf}
+\caption{Factor graph for one rating. The plate repeats the trait product;
+user/item variables are shared across all corresponding ratings. Edges connect
+variables to the factors that depend on them.}
+\label{fig:graph}
+\end{figure}
+
+Prior factors regularize parameters; products express compatibility; the sum
+adds biases; Gaussian noise captures residual variation; and the interval
+factor converts a continuous score into a rating. The preserved M2 reference includes a
+concrete variable/factor/edge specification in \code{graph\_instance.json}.
+
+Ratings are conditionally independent given all relevant parameters. Ratings
+sharing a user or item are generally dependent after marginalization. Independent
+priors do not imply independent posterior parameters: the factorized Gaussian
+posterior is an approximation. The model assumes stationary preferences and does
+not model why a movie was rated or identify causal effects.
+
+\section{Learning and inference}
+\subsection{Posterior learning and prediction query}
+Training approximates $p(\Theta\mid R_{\mathcal D})$ by a product of univariate
+Gaussians, storing precision $\lambda=1/v$ and weighted mean $\eta=m/v$.
+Thresholds remain fixed; noise and prior variances are fixed within a run and varied in the M3 sensitivity experiments. Prediction computes
+$p(R_{ui}=r\mid R_{\mathcal D})$ for an unobserved pair.
+
+Under the factorized approximation, product moments are
+\begin{align}
+M_k&=\E[s_kt_k]=m_{s_k}m_{t_k},\\
+V_k&=\Var(s_kt_k)=v_{s_k}v_{t_k}+v_{s_k}m_{t_k}^{2}+v_{t_k}m_{s_k}^{2}.
+\end{align}
+\begin{samepage}
+Set $m_y=\mu+m_{b_u}+m_{b_i}+\sum_kM_k$ and
+$v_y=\beta^2+v_{b_u}+v_{b_i}+\sum_kV_k$. Approximating the score as Gaussian gives
+\begin{equation}
+\widehat p_r=\Phi\!\left(\frac{c_r-m_y}{\sqrt{v_y}}\right)
+-\Phi\!\left(\frac{c_{r-1}-m_y}{\sqrt{v_y}}\right),\qquad
+\widehat R=\sum_{r=1}^{5}r\widehat p_r.\label{eq:prediction}
+\end{equation}
+The moments are exact under the factorized $q$; the Gaussian score approximation
+is additional. Probabilities use a $10^{-15}$ numerical floor and renormalization.
+\end{samepage}
+
+\subsection{Local hybrid EP/VMP update}
+Exact posterior inference is intractable at this scale because bilinear products
+and ordinal observations couple many parameters. Following Matchbox~\cite{stern2009},
+we use VMP at products and EP or exact Gaussian messages elsewhere. A local loop
+alternates forward moments, ordinal moment matching and reverse messages,
+reconstructing marginals from a fixed cavity and the current message.
+
+For an incoming score $\N(m,v)$, define $\alpha=(c_{r-1}-m)/\sqrt v$,
+$\gamma=(c_r-m)/\sqrt v$ and $Z=\Phi(\gamma)-\Phi(\alpha)$. Truncated moments are
+\begin{align}
+\widehat m&=m+\sqrt v\,\frac{\phi(\alpha)-\phi(\gamma)}{Z},\\
+\widehat v&=v\left[1+\frac{\alpha\phi(\alpha)-\gamma\phi(\gamma)}{Z}
+-\left(\frac{\phi(\alpha)-\phi(\gamma)}{Z}\right)^2\right].
+\end{align}
+Gaussian division yields $\lambda_o=\widehat v^{-1}-v^{-1}$ and
+$\eta_o=\widehat m/\widehat v-m/v$. Write the outgoing Gaussian as
+$\N(y;m_o,v_o)$. Reverse propagation to product $z_k$ gives
+\begin{align}
+d_k&=m_o-\mu-m^{\setminus n}_{b_u}-m^{\setminus n}_{b_i}-\sum_{\ell\ne k}M_\ell,\\
+w_k&=v_o+\beta^2+v^{\setminus n}_{b_u}+v^{\setminus n}_{b_i}+\sum_{\ell\ne k}V_\ell.
+\end{align}
+The VMP message to $s_k$ is
+\begin{equation}
+\lambda_{f\to s_k}=\frac{\E[t_k^2]}{w_k},\qquad
+\eta_{f\to s_k}=\frac{d_k\E[t_k]}{w_k},\quad
+\E[t_k^2]=v_{t_k}+m_{t_k}^2.
+\end{equation}
+The item update is symmetric. A bias receives the analogous Gaussian sum
+message with its own cavity term omitted. Product moments use current local
+marginals; bias inputs remain cavities. Local damping is 0.7, with at most
+10 iterations and an absolute mean/variance change tolerance of $10^{-4}$.
+
+\subsection{ADF versus repeated EP}
+EP caches a Gaussian site per rating. For each touched scalar parameter,
+\begin{equation}
+\lambda=\lambda_0+\sum_n\lambda_n,\quad \eta=\eta_0+\sum_n\eta_n;
+\qquad
+\lambda^{\setminus n}=\lambda-\lambda_n,\quad
+\eta^{\setminus n}=\eta-\eta_n.\label{eq:cavity}
+\end{equation}
+An EP pass visits the fixed training order, subtracts the old site's natural
+parameters, runs the local update, and replaces that site. The replacement is
+damped with weight 1 on pass one and 0.5 thereafter.
+
+ADF processes each rating once and discards its site. Thus EP's first pass
+matches ADF under identical priors and order. Replaying ADF without cavity
+removal would double-count evidence. Our ADF interface rejects a second pass.
+Five or ten EP passes are computational budgets, not proof of convergence.
+
+\input{markov_section}
+
+\section{Mathematical validation and complexity}
+The M2 mathematical foundation retained nine checks: truncated moments against quadrature; exact marginals for a
+single $K=0$ ordinal factor; ADF--EP1 equality; the prior-plus-sites invariant;
+no double counting on a single-rating revisit; product moments against Monte
+Carlo; probability/metric sanity; disjoint reproducible splits; and checkpoint
+reload. These validate specific formulas and invariants, not exactness of the
+whole approximation.
+
+The bilinear test, rerun for M3, uses $R=5$, offset 3, noise variance 1,
+$s\sim\N(0.5,0.4)$ and $t\sim\N(0.8,0.4)$, with bias variances $10^{-8}$.
+Tensor Gauss--Hermite quadrature integrates the likelihood
+$P(y>4.5\mid s,t)$, analytically integrating the biases. Increasing the order
+from 40 to 80 changes the reference moments by at most $1.04\times10^{-10}$.
+For this diagnostic only, the local cap is 500 and tolerance $10^{-12}$;
+it converges after 50 iterations.
+
+\begin{table}[!htbp]\centering\small
+\input{generated/validation_compact.tex}
+\caption{One-observation validation against 80-point-per-axis quadrature.
+The hybrid approximation cannot retain the nonzero posterior covariance.}
+\end{table}
+Means differ by less than 0.013, but both variances are about 10\% too small.
+This motivates checking uncertainty as well as rating error.
+
+For $N$ ratings, $K$ traits, $L$ local iterations and $T$ passes, training costs
+$O(TNL(K+1))$ and batch prediction $O(N(K+1))$. Posterior storage is
+$O((U+I)(K+1))$. Repeated EP additionally stores
+\begin{equation}
+8\times2\times N(2K+2)=32N(K+1)\ \text{bytes}
+\end{equation}
+in 64-bit rating sites. At $N=800{,}167$, $K=8$, this is 219.77 MiB; ADF has no
+site cache. The 87,714 scalar parameters require 175,428 natural parameters
+(1.34 MiB). These array sizes exclude data, temporaries and process overhead.
+
+\input{setup_m3}
+\input{results_m3}
+\input{robustness_m3}
+
+\section{Related work and revised SOTA positioning}
+\textbf{Matchbox: Microsoft Research, WWW 2009.} Stern, Herbrich and
+Graepel~\cite{stern2009} combine latent features, optional metadata, feedback
+models and hybrid message passing. ADF provides efficient online Bayesian
+updates; repeated EP revisits cached rating contributions. Their experiments
+study recommendation accuracy, cold-start behaviour and scalability. Our
+implementation retains the inference question but uses static ID features,
+fixed cuts and its own schedule, rather than reproducing Infer.NET or the full
+system. Published scores use different protocols and are not directly comparable.
+
+\textbf{PreRec: AWS AI Labs affiliation, WSDM 2024.} Lin et al.~\cite{lin2024}
+use a hierarchical Bayesian model with neural user/item encoders, domain
+variables and popularity effects. Training uses MAP optimization;
+zero-shot scoring changes domain and popularity mechanisms. XMarket/Online
+Retail experiments evaluate cross-domain sequential ranking and limited-data
+adaptation with Recall and revised NDCG metrics. Reported gains support modelling transfer and bias in that setting,
+subject to the learned representations and assumed bias mechanisms. They do
+not establish an EP advantage or provide a MovieLens rating baseline.
+
+The evidence revises our position from an implementation comparison to a
+controlled inference-and-regularization study. Longer EP passes improve
+prediction at extra time and imperfect calibration. A GMRF adds a small
+benefit over an already strong MAP baseline; robustness experiments limit
+any claim of general superiority. The implemented contributions are comparative
+experiments, mathematical checks and interpretation, not a new inference
+algorithm or causal-debiasing system. Neither published paper's scores are
+numerically compared with ours because the evaluation protocols differ.
+
+\input{conclusion_m3}
+
+\FloatBarrier
+\bibliographystyle{plain}
+\bibliography{references}
+\clearpage
+\appendix
+\input{appendix_m3}
+\end{document}

@@ -1,0 +1,23 @@
+Warming kernels; compilation excluded from fit timing.
+main seed=42 Global: RMSE=1.115984, NLL=1.454677, fit=0.00s
+main seed=42 UserMean: RMSE=1.033225, NLL=1.345451, fit=0.05s
+main seed=42 ItemMean: RMSE=0.974910, NLL=1.316640, fit=0.05s
+main seed=42 MF_SGD: RMSE=0.864637, NLL=1.217536, fit=1.20s
+main seed=42 ADF: RMSE=0.893983, NLL=1.248555, fit=2.58s
+main seed=42 EP1: RMSE=0.893983, NLL=1.248555, fit=2.79s
+main seed=42 EP2: RMSE=0.878955, NLL=1.233693, fit=5.50s
+main seed=42 EP3: RMSE=0.869069, NLL=1.224199, fit=8.19s
+main seed=42 EP4: RMSE=0.863312, NLL=1.218684, fit=10.93s
+main seed=42 EP5: RMSE=0.859476, NLL=1.215012, fit=13.74s
+main seed=42 EP10: RMSE=0.850159, NLL=1.206187, fit=27.16s
+main seed=42 EP5_noise_0.5: RMSE=0.865318, NLL=1.235845, fit=13.98s
+main seed=42 EP5_noise_2: RMSE=0.869479, NLL=1.312835, fit=13.62s
+main seed=42 EP_noise_tuned: RMSE=0.859476, NLL=1.215012, fit=13.74s
+  main seed=42 gamma=0: validation RMSE=0.850498, epoch=20
+  main seed=42 gamma=1: validation RMSE=0.850167, epoch=20
+  main seed=42 gamma=10: validation RMSE=0.848887, epoch=19
+  main seed=42 gamma=100: validation RMSE=0.855438, epoch=25
+main seed=42 MF_MAP: RMSE=0.847626, NLL=1.198079, fit=10.35s
+main seed=42 GMRF_MAP: RMSE=0.846685, NLL=1.197277, fit=10.14s
+main seed=42 Graph_selected: RMSE=0.846685, NLL=1.197277, fit=10.14s
+Completed: /workspace/scratch/88c05d49406a/m4work/seed42_rerun

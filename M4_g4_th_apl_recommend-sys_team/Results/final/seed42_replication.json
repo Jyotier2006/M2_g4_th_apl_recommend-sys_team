@@ -1,0 +1,10 @@
+{
+  "seed": 42,
+  "methods": 17,
+  "compared_values": 146,
+  "max_absolute_difference": 0.0,
+  "tolerance": 1e-08,
+  "split_hashes_matched": true,
+  "timings_compared": false,
+  "passed": true
+}

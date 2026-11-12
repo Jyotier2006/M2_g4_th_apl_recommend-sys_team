@@ -1,0 +1,14 @@
+test_adf_ep1 (__main__.Checks.test_adf_ep1) ... ok
+test_als_decreases_objective (__main__.Checks.test_als_decreases_objective) ... ok
+test_edges_affect_predictions (__main__.Checks.test_edges_affect_predictions) ... ok
+test_gamma_zero_ignores_edges (__main__.Checks.test_gamma_zero_ignores_edges) ... ok
+test_graph (__main__.Checks.test_graph) ... ok
+test_metrics (__main__.Checks.test_metrics) ... ok
+test_original_equivalence (__main__.Checks.test_original_equivalence) ... ok
+test_site_bookkeeping (__main__.Checks.test_site_bookkeeping) ... ok
+test_truncation (__main__.Checks.test_truncation) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 4.972s
+
+OK

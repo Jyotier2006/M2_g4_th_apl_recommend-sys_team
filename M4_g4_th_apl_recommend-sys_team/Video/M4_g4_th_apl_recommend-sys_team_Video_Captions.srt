@@ -1,0 +1,213 @@
+1
+00:00:00,000 --> 00:00:05,324
+This project asks how to predict a movie rating and
+how uncertain that prediction is.
+
+2
+00:00:05,546 --> 00:00:09,942
+MovieLens One M contains just over one million
+ratings. Only about four and a half percent of
+
+3
+00:00:09,942 --> 00:00:14,339
+possible user and movie pairs are observed.
+
+4
+00:00:14,705 --> 00:00:19,406
+Our model predicts the probability of each star
+rating. We test repeated inference passes and an
+
+5
+00:00:19,406 --> 00:00:24,108
+undirected graph that connects similar movies.
+
+6
+00:00:24,500 --> 00:00:29,010
+Each user and movie has an eight dimensional latent
+vector. The coordinates are learned from ratings, so
+
+7
+00:00:29,010 --> 00:00:33,520
+they do not have fixed genre names.
+
+8
+00:00:33,896 --> 00:00:37,752
+Their dot product, plus biases, gives a score.
+Thresholds convert a noisy score into one of five
+
+9
+00:00:37,752 --> 00:00:41,609
+star ratings.
+
+10
+00:00:41,931 --> 00:00:46,197
+Given the latent traits and biases, ratings are
+independent. They are related marginally because many
+
+11
+00:00:46,197 --> 00:00:50,463
+ratings share the same traits.
+
+12
+00:00:50,833 --> 00:00:57,482
+Assumed density filtering visits each rating once and
+approximates its effect with Gaussian messages.
+
+13
+00:00:57,759 --> 00:01:03,725
+One pass of expectation propagation is identical in
+our implementation. Later passes remove the old
+
+14
+00:01:03,725 --> 00:01:09,690
+contribution, recompute it using the remaining
+evidence, and damp the update.
+
+15
+00:01:10,187 --> 00:01:14,889
+Repeated passes improve prediction error here, but
+increase training time. The Gaussian approximation
+
+16
+00:01:14,889 --> 00:01:19,591
+still misses some posterior dependencies.
+
+17
+00:01:20,000 --> 00:01:26,376
+The Markov network places an undirected edge between
+movies with similar rating patterns or genres.
+
+18
+00:01:26,642 --> 00:01:31,688
+The Gaussian prior penalizes differences between
+connected movie vectors. When a movie has few
+
+19
+00:01:31,688 --> 00:01:36,734
+ratings, a related movie can help stabilize its
+vector.
+
+20
+00:01:37,154 --> 00:01:42,153
+We fit maximum a posteriori estimates. Setting gamma
+to zero removes the edge penalty while keeping the
+
+21
+00:01:42,153 --> 00:01:47,152
+same fitting method. That is our graph ablation.
+
+22
+00:01:47,583 --> 00:01:54,992
+For each of five random seeds, all methods share the
+same training, validation, and test observations.
+
+23
+00:01:55,301 --> 00:01:59,465
+Only training ratings build the graph. Validation
+chooses settings, and test ratings are used only for
+
+24
+00:01:59,465 --> 00:02:03,629
+evaluation.
+
+25
+00:02:03,976 --> 00:02:08,447
+We also reran the full seed forty two split. All one
+hundred forty six compared scores and settings
+
+26
+00:02:08,447 --> 00:02:12,918
+matched, with timings excluded.
+
+27
+00:02:13,292 --> 00:02:17,796
+Ten expectation propagation passes reduce average
+root mean squared error from about point eight nine
+
+28
+00:02:17,796 --> 00:02:22,300
+eight to point eight five five.
+
+29
+00:02:22,675 --> 00:02:26,920
+The graph model scores point eight four nine nine.
+Compared with the same model without the graph, the
+
+30
+00:02:26,920 --> 00:02:31,164
+gain is about six ten thousandths.
+
+31
+00:02:31,518 --> 00:02:36,721
+Four of five within split bootstrap intervals favor
+the graph; the fifth includes zero. These splits
+
+32
+00:02:36,721 --> 00:02:41,924
+overlap, so we do not treat them as independent
+replications.
+
+33
+00:02:42,357 --> 00:02:46,069
+Graph MAP has the lowest average log loss, but its
+calibration error is slightly higher than graph free
+
+34
+00:02:46,069 --> 00:02:49,782
+MAP.
+
+35
+00:02:50,125 --> 00:02:55,131
+We kept only one quarter of the training ratings in
+one experiment. In another, we changed twenty percent
+
+36
+00:02:55,131 --> 00:03:00,137
+of the training stars and kept the test labels clean.
+
+37
+00:03:00,554 --> 00:03:05,202
+The graph advantage grows under both conditions. This
+is consistent with neighboring movies sharing useful
+
+38
+00:03:05,202 --> 00:03:09,850
+evidence when individual observations are weak.
+
+39
+00:03:10,238 --> 00:03:15,558
+Cold users remain difficult because movie edges do
+not provide user preferences. Similarity can also be
+
+40
+00:03:15,558 --> 00:03:20,879
+misleading if an edge connects unrelated movies.
+
+41
+00:03:21,333 --> 00:03:28,067
+Microsoft Research Matchbox motivates our approximate
+inference. PreRec addresses a different problem,
+
+42
+00:03:28,067 --> 00:03:34,800
+cross domain ranking. Our benchmark does not
+establish performance against either complete system.
+
+43
+00:03:35,361 --> 00:03:40,122
+The main gain from repeated inference is clear. The
+graph adds modest value on clean ratings and is most
+
+44
+00:03:40,122 --> 00:03:44,884
+useful in the sparse and noisy settings we tested.
+
+45
+00:03:45,280 --> 00:03:51,118
+A next step is to test time ordered splits and
+account for uncertainty in the graph model. The
+
+46
+00:03:51,118 --> 00:03:56,956
+package contains the code, configurations, results,
+and reproduction commands.

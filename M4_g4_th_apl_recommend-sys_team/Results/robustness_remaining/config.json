@@ -1,0 +1,57 @@
+{
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "robustness_seeds": [
+    42,
+    43,
+    44
+  ],
+  "k": 8,
+  "ep_passes": 10,
+  "map_epochs": 25,
+  "gammas": [
+    0.0,
+    10.0
+  ],
+  "reg": 10.0,
+  "bias_reg": 10.0,
+  "top": 20,
+  "genre_mix": 0.1,
+  "noise_variances": [
+    0.5,
+    1.0,
+    2.0
+  ],
+  "train_fractions": [
+    0.25,
+    0.5
+  ],
+  "corruption_fractions": [
+    0.1,
+    0.2
+  ],
+  "graph_neighbours": [
+    5,
+    50
+  ],
+  "bootstrap_replicates": 2000,
+  "selection": "Robustness: fixed gamma=10 versus gamma=0; epochs selected on validation within 25. Gamma 10 retained from clean-validation comparisons; graph topology and labels rebuilt from each condition training data.",
+  "protocol_version": "m3-v1",
+  "stage": "robustness",
+  "executed_seeds": [
+    44
+  ],
+  "data_path": "/workspace/scratch/88c05d49406a/m3_data/ml-1m",
+  "condition_filter": [
+    "graph_top_50",
+    "ratings_only",
+    "genres_only",
+    "cold_items",
+    "cold_users"
+  ]
+}

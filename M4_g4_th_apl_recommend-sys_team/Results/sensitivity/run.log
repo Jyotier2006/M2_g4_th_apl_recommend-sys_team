@@ -1,0 +1,20 @@
+Warming kernels; compilation excluded from fit timing.
+sensitivity seed=42 EP5_prior_0.1: RMSE=0.862959, NLL=1.218286, fit=20.17s
+sensitivity seed=42 EP5_prior_0.5: RMSE=0.861585, NLL=1.217345, fit=22.42s
+sensitivity seed=42 EP5_damping_0.25: RMSE=0.871129, NLL=1.226190, fit=23.72s
+sensitivity seed=42 EP5_damping_1: RMSE=0.848700, NLL=1.204797, fit=18.78s
+sensitivity seed=42 EP5_reshuffled: RMSE=0.860061, NLL=1.215465, fit=22.44s
+sensitivity seed=42 ADF_reshuffled: RMSE=0.893271, NLL=1.247810, fit=4.14s
+sensitivity seed=43 EP5_prior_0.1: RMSE=0.871537, NLL=1.225404, fit=19.52s
+sensitivity seed=43 EP5_prior_0.5: RMSE=0.869254, NLL=1.223063, fit=22.14s
+sensitivity seed=43 EP5_damping_0.25: RMSE=0.880490, NLL=1.233943, fit=20.31s
+sensitivity seed=43 EP5_damping_1: RMSE=0.856135, NLL=1.210179, fit=19.74s
+sensitivity seed=43 EP5_reshuffled: RMSE=0.867794, NLL=1.221517, fit=22.33s
+sensitivity seed=43 ADF_reshuffled: RMSE=0.902998, NLL=1.256936, fit=4.70s
+sensitivity seed=44 EP5_prior_0.1: RMSE=0.867026, NLL=1.221183, fit=19.45s
+sensitivity seed=44 EP5_prior_0.5: RMSE=0.864157, NLL=1.218032, fit=20.78s
+sensitivity seed=44 EP5_damping_0.25: RMSE=0.873937, NLL=1.227570, fit=23.29s
+sensitivity seed=44 EP5_damping_1: RMSE=0.853903, NLL=1.208331, fit=19.53s
+sensitivity seed=44 EP5_reshuffled: RMSE=0.863499, NLL=1.218053, fit=21.27s
+sensitivity seed=44 ADF_reshuffled: RMSE=0.899017, NLL=1.253039, fit=4.25s
+Completed: /workspace/scratch/88c05d49406a/m3_build/M3_g4_th_apl_recommend-sys_team/Results/sensitivity

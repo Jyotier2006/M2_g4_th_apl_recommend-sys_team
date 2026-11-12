@@ -1,0 +1,618 @@
+{
+  "variables": [
+    {
+      "name": "s_0_0",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "s_0_1",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "bs_0",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "s_1_0",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "s_1_1",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "bs_1",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "t_0_0",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "t_0_1",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "bt_0",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "t_1_0",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "t_1_1",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "bt_1",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "z_0_0",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "z_0_1",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "a_0",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "y_0",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "R_0",
+      "domain": "{1,2,3,4,5}",
+      "observed": true
+    },
+    {
+      "name": "z_1_0",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "z_1_1",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "a_1",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "y_1",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "R_1",
+      "domain": "{1,2,3,4,5}",
+      "observed": true
+    },
+    {
+      "name": "z_2_0",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "z_2_1",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "a_2",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "y_2",
+      "domain": "real",
+      "observed": false
+    },
+    {
+      "name": "R_2",
+      "domain": "{1,2,3,4,5}",
+      "observed": true
+    }
+  ],
+  "factors": [
+    {
+      "name": "prior_s_0_0",
+      "kind": "Gaussian prior",
+      "variables": [
+        "s_0_0"
+      ],
+      "expression": "N(mean_prior, trait_var)"
+    },
+    {
+      "name": "prior_s_0_1",
+      "kind": "Gaussian prior",
+      "variables": [
+        "s_0_1"
+      ],
+      "expression": "N(mean_prior, trait_var)"
+    },
+    {
+      "name": "prior_bs_0",
+      "kind": "Gaussian prior",
+      "variables": [
+        "bs_0"
+      ],
+      "expression": "N(0, bias_var)"
+    },
+    {
+      "name": "prior_s_1_0",
+      "kind": "Gaussian prior",
+      "variables": [
+        "s_1_0"
+      ],
+      "expression": "N(mean_prior, trait_var)"
+    },
+    {
+      "name": "prior_s_1_1",
+      "kind": "Gaussian prior",
+      "variables": [
+        "s_1_1"
+      ],
+      "expression": "N(mean_prior, trait_var)"
+    },
+    {
+      "name": "prior_bs_1",
+      "kind": "Gaussian prior",
+      "variables": [
+        "bs_1"
+      ],
+      "expression": "N(0, bias_var)"
+    },
+    {
+      "name": "prior_t_0_0",
+      "kind": "Gaussian prior",
+      "variables": [
+        "t_0_0"
+      ],
+      "expression": "N(mean_prior, trait_var)"
+    },
+    {
+      "name": "prior_t_0_1",
+      "kind": "Gaussian prior",
+      "variables": [
+        "t_0_1"
+      ],
+      "expression": "N(mean_prior, trait_var)"
+    },
+    {
+      "name": "prior_bt_0",
+      "kind": "Gaussian prior",
+      "variables": [
+        "bt_0"
+      ],
+      "expression": "N(0, bias_var)"
+    },
+    {
+      "name": "prior_t_1_0",
+      "kind": "Gaussian prior",
+      "variables": [
+        "t_1_0"
+      ],
+      "expression": "N(mean_prior, trait_var)"
+    },
+    {
+      "name": "prior_t_1_1",
+      "kind": "Gaussian prior",
+      "variables": [
+        "t_1_1"
+      ],
+      "expression": "N(mean_prior, trait_var)"
+    },
+    {
+      "name": "prior_bt_1",
+      "kind": "Gaussian prior",
+      "variables": [
+        "bt_1"
+      ],
+      "expression": "N(0, bias_var)"
+    },
+    {
+      "name": "product_z_0_0",
+      "kind": "deterministic product",
+      "variables": [
+        "s_0_0",
+        "t_0_0",
+        "z_0_0"
+      ],
+      "expression": "delta(z-s*t)"
+    },
+    {
+      "name": "product_z_0_1",
+      "kind": "deterministic product",
+      "variables": [
+        "s_0_1",
+        "t_0_1",
+        "z_0_1"
+      ],
+      "expression": "delta(z-s*t)"
+    },
+    {
+      "name": "sum_0",
+      "kind": "deterministic sum",
+      "variables": [
+        "z_0_0",
+        "z_0_1",
+        "bs_0",
+        "bt_0",
+        "a_0"
+      ],
+      "expression": "delta(a-offset-bs-bt-sum(z))"
+    },
+    {
+      "name": "noise_0",
+      "kind": "Gaussian observation",
+      "variables": [
+        "a_0",
+        "y_0"
+      ],
+      "expression": "N(y;a,noise_var)"
+    },
+    {
+      "name": "ordinal_0",
+      "kind": "fixed ordinal threshold",
+      "variables": [
+        "y_0",
+        "R_0"
+      ],
+      "expression": "I(threshold[R-1] < y <= threshold[R])"
+    },
+    {
+      "name": "product_z_1_0",
+      "kind": "deterministic product",
+      "variables": [
+        "s_0_0",
+        "t_1_0",
+        "z_1_0"
+      ],
+      "expression": "delta(z-s*t)"
+    },
+    {
+      "name": "product_z_1_1",
+      "kind": "deterministic product",
+      "variables": [
+        "s_0_1",
+        "t_1_1",
+        "z_1_1"
+      ],
+      "expression": "delta(z-s*t)"
+    },
+    {
+      "name": "sum_1",
+      "kind": "deterministic sum",
+      "variables": [
+        "z_1_0",
+        "z_1_1",
+        "bs_0",
+        "bt_1",
+        "a_1"
+      ],
+      "expression": "delta(a-offset-bs-bt-sum(z))"
+    },
+    {
+      "name": "noise_1",
+      "kind": "Gaussian observation",
+      "variables": [
+        "a_1",
+        "y_1"
+      ],
+      "expression": "N(y;a,noise_var)"
+    },
+    {
+      "name": "ordinal_1",
+      "kind": "fixed ordinal threshold",
+      "variables": [
+        "y_1",
+        "R_1"
+      ],
+      "expression": "I(threshold[R-1] < y <= threshold[R])"
+    },
+    {
+      "name": "product_z_2_0",
+      "kind": "deterministic product",
+      "variables": [
+        "s_1_0",
+        "t_0_0",
+        "z_2_0"
+      ],
+      "expression": "delta(z-s*t)"
+    },
+    {
+      "name": "product_z_2_1",
+      "kind": "deterministic product",
+      "variables": [
+        "s_1_1",
+        "t_0_1",
+        "z_2_1"
+      ],
+      "expression": "delta(z-s*t)"
+    },
+    {
+      "name": "sum_2",
+      "kind": "deterministic sum",
+      "variables": [
+        "z_2_0",
+        "z_2_1",
+        "bs_1",
+        "bt_0",
+        "a_2"
+      ],
+      "expression": "delta(a-offset-bs-bt-sum(z))"
+    },
+    {
+      "name": "noise_2",
+      "kind": "Gaussian observation",
+      "variables": [
+        "a_2",
+        "y_2"
+      ],
+      "expression": "N(y;a,noise_var)"
+    },
+    {
+      "name": "ordinal_2",
+      "kind": "fixed ordinal threshold",
+      "variables": [
+        "y_2",
+        "R_2"
+      ],
+      "expression": "I(threshold[R-1] < y <= threshold[R])"
+    }
+  ],
+  "edges": [
+    {
+      "factor": "prior_s_0_0",
+      "variable": "s_0_0"
+    },
+    {
+      "factor": "prior_s_0_1",
+      "variable": "s_0_1"
+    },
+    {
+      "factor": "prior_bs_0",
+      "variable": "bs_0"
+    },
+    {
+      "factor": "prior_s_1_0",
+      "variable": "s_1_0"
+    },
+    {
+      "factor": "prior_s_1_1",
+      "variable": "s_1_1"
+    },
+    {
+      "factor": "prior_bs_1",
+      "variable": "bs_1"
+    },
+    {
+      "factor": "prior_t_0_0",
+      "variable": "t_0_0"
+    },
+    {
+      "factor": "prior_t_0_1",
+      "variable": "t_0_1"
+    },
+    {
+      "factor": "prior_bt_0",
+      "variable": "bt_0"
+    },
+    {
+      "factor": "prior_t_1_0",
+      "variable": "t_1_0"
+    },
+    {
+      "factor": "prior_t_1_1",
+      "variable": "t_1_1"
+    },
+    {
+      "factor": "prior_bt_1",
+      "variable": "bt_1"
+    },
+    {
+      "factor": "product_z_0_0",
+      "variable": "s_0_0"
+    },
+    {
+      "factor": "product_z_0_0",
+      "variable": "t_0_0"
+    },
+    {
+      "factor": "product_z_0_0",
+      "variable": "z_0_0"
+    },
+    {
+      "factor": "product_z_0_1",
+      "variable": "s_0_1"
+    },
+    {
+      "factor": "product_z_0_1",
+      "variable": "t_0_1"
+    },
+    {
+      "factor": "product_z_0_1",
+      "variable": "z_0_1"
+    },
+    {
+      "factor": "sum_0",
+      "variable": "z_0_0"
+    },
+    {
+      "factor": "sum_0",
+      "variable": "z_0_1"
+    },
+    {
+      "factor": "sum_0",
+      "variable": "bs_0"
+    },
+    {
+      "factor": "sum_0",
+      "variable": "bt_0"
+    },
+    {
+      "factor": "sum_0",
+      "variable": "a_0"
+    },
+    {
+      "factor": "noise_0",
+      "variable": "a_0"
+    },
+    {
+      "factor": "noise_0",
+      "variable": "y_0"
+    },
+    {
+      "factor": "ordinal_0",
+      "variable": "y_0"
+    },
+    {
+      "factor": "ordinal_0",
+      "variable": "R_0"
+    },
+    {
+      "factor": "product_z_1_0",
+      "variable": "s_0_0"
+    },
+    {
+      "factor": "product_z_1_0",
+      "variable": "t_1_0"
+    },
+    {
+      "factor": "product_z_1_0",
+      "variable": "z_1_0"
+    },
+    {
+      "factor": "product_z_1_1",
+      "variable": "s_0_1"
+    },
+    {
+      "factor": "product_z_1_1",
+      "variable": "t_1_1"
+    },
+    {
+      "factor": "product_z_1_1",
+      "variable": "z_1_1"
+    },
+    {
+      "factor": "sum_1",
+      "variable": "z_1_0"
+    },
+    {
+      "factor": "sum_1",
+      "variable": "z_1_1"
+    },
+    {
+      "factor": "sum_1",
+      "variable": "bs_0"
+    },
+    {
+      "factor": "sum_1",
+      "variable": "bt_1"
+    },
+    {
+      "factor": "sum_1",
+      "variable": "a_1"
+    },
+    {
+      "factor": "noise_1",
+      "variable": "a_1"
+    },
+    {
+      "factor": "noise_1",
+      "variable": "y_1"
+    },
+    {
+      "factor": "ordinal_1",
+      "variable": "y_1"
+    },
+    {
+      "factor": "ordinal_1",
+      "variable": "R_1"
+    },
+    {
+      "factor": "product_z_2_0",
+      "variable": "s_1_0"
+    },
+    {
+      "factor": "product_z_2_0",
+      "variable": "t_0_0"
+    },
+    {
+      "factor": "product_z_2_0",
+      "variable": "z_2_0"
+    },
+    {
+      "factor": "product_z_2_1",
+      "variable": "s_1_1"
+    },
+    {
+      "factor": "product_z_2_1",
+      "variable": "t_0_1"
+    },
+    {
+      "factor": "product_z_2_1",
+      "variable": "z_2_1"
+    },
+    {
+      "factor": "sum_2",
+      "variable": "z_2_0"
+    },
+    {
+      "factor": "sum_2",
+      "variable": "z_2_1"
+    },
+    {
+      "factor": "sum_2",
+      "variable": "bs_1"
+    },
+    {
+      "factor": "sum_2",
+      "variable": "bt_0"
+    },
+    {
+      "factor": "sum_2",
+      "variable": "a_2"
+    },
+    {
+      "factor": "noise_2",
+      "variable": "a_2"
+    },
+    {
+      "factor": "noise_2",
+      "variable": "y_2"
+    },
+    {
+      "factor": "ordinal_2",
+      "variable": "y_2"
+    },
+    {
+      "factor": "ordinal_2",
+      "variable": "R_2"
+    }
+  ],
+  "note": "Tiny real instantiation; plates in the report describe repeated factors on MovieLens. Structure fixed, parameters learned."
+}

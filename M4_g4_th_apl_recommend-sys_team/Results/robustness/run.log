@@ -1,0 +1,158 @@
+Warming kernels; compilation excluded from fit timing.
+retain_0.25 seed=42 ADF: RMSE=0.917348, NLL=1.275208, fit=1.08s
+retain_0.25 seed=42 EP5: RMSE=0.915632, NLL=1.272638, fit=4.65s
+  retain_0.25 seed=42 gamma=0: validation RMSE=0.916375, epoch=25
+  retain_0.25 seed=42 gamma=10: validation RMSE=0.907653, epoch=25
+retain_0.25 seed=42 MF_MAP: RMSE=0.913269, NLL=1.270493, fit=3.69s
+retain_0.25 seed=42 GMRF_MAP: RMSE=0.905852, NLL=1.262639, fit=3.39s
+retain_0.25 seed=42 Graph_selected: RMSE=0.905852, NLL=1.262639, fit=3.39s
+retain_0.5 seed=42 ADF: RMSE=0.906552, NLL=1.262156, fit=1.62s
+retain_0.5 seed=42 EP5: RMSE=0.888652, NLL=1.244288, fit=8.88s
+  retain_0.5 seed=42 gamma=0: validation RMSE=0.881113, epoch=25
+  retain_0.5 seed=42 gamma=10: validation RMSE=0.875843, epoch=25
+retain_0.5 seed=42 MF_MAP: RMSE=0.877875, NLL=1.232128, fit=6.70s
+retain_0.5 seed=42 GMRF_MAP: RMSE=0.873737, NLL=1.227758, fit=6.50s
+retain_0.5 seed=42 Graph_selected: RMSE=0.873737, NLL=1.227758, fit=6.50s
+noise_0.1 seed=42 ADF: RMSE=0.908978, NLL=1.263644, fit=3.01s
+noise_0.1 seed=42 EP5: RMSE=0.887029, NLL=1.241419, fit=15.50s
+  noise_0.1 seed=42 gamma=0: validation RMSE=0.876642, epoch=25
+  noise_0.1 seed=42 gamma=10: validation RMSE=0.872928, epoch=25
+noise_0.1 seed=42 MF_MAP: RMSE=0.879675, NLL=1.235498, fit=14.82s
+noise_0.1 seed=42 GMRF_MAP: RMSE=0.876340, NLL=1.232333, fit=13.34s
+noise_0.1 seed=42 Graph_selected: RMSE=0.876340, NLL=1.232333, fit=13.34s
+noise_0.2 seed=42 ADF: RMSE=0.935169, NLL=1.290746, fit=3.13s
+noise_0.2 seed=42 EP5: RMSE=0.930159, NLL=1.283950, fit=16.13s
+  noise_0.2 seed=42 gamma=0: validation RMSE=0.924658, epoch=25
+  noise_0.2 seed=42 gamma=10: validation RMSE=0.916624, epoch=25
+noise_0.2 seed=42 MF_MAP: RMSE=0.929174, NLL=1.288545, fit=14.73s
+noise_0.2 seed=42 GMRF_MAP: RMSE=0.922705, NLL=1.282678, fit=14.69s
+noise_0.2 seed=42 Graph_selected: RMSE=0.922705, NLL=1.282678, fit=14.69s
+  graph_top_5 seed=42 gamma=0: validation RMSE=0.850498, epoch=20
+  graph_top_5 seed=42 gamma=10: validation RMSE=0.848618, epoch=21
+graph_top_5 seed=42 MF_MAP: RMSE=0.847626, NLL=1.198079, fit=13.05s
+graph_top_5 seed=42 GMRF_MAP: RMSE=0.846254, NLL=1.196753, fit=12.32s
+graph_top_5 seed=42 Graph_selected: RMSE=0.846254, NLL=1.196753, fit=12.32s
+  graph_top_50 seed=42 gamma=0: validation RMSE=0.850498, epoch=20
+  graph_top_50 seed=42 gamma=10: validation RMSE=0.849336, epoch=25
+graph_top_50 seed=42 MF_MAP: RMSE=0.847626, NLL=1.198079, fit=12.72s
+graph_top_50 seed=42 GMRF_MAP: RMSE=0.847107, NLL=1.197758, fit=12.92s
+graph_top_50 seed=42 Graph_selected: RMSE=0.847107, NLL=1.197758, fit=12.92s
+  ratings_only seed=42 gamma=0: validation RMSE=0.850498, epoch=20
+  ratings_only seed=42 gamma=10: validation RMSE=0.848638, epoch=18
+ratings_only seed=42 MF_MAP: RMSE=0.847626, NLL=1.198079, fit=12.26s
+ratings_only seed=42 GMRF_MAP: RMSE=0.846560, NLL=1.197130, fit=12.52s
+ratings_only seed=42 Graph_selected: RMSE=0.846560, NLL=1.197130, fit=12.52s
+  genres_only seed=42 gamma=0: validation RMSE=0.850498, epoch=20
+  genres_only seed=42 gamma=10: validation RMSE=0.849971, epoch=25
+genres_only seed=42 MF_MAP: RMSE=0.847626, NLL=1.198079, fit=14.37s
+genres_only seed=42 GMRF_MAP: RMSE=0.847605, NLL=1.198263, fit=10.89s
+genres_only seed=42 Graph_selected: RMSE=0.847605, NLL=1.198263, fit=10.89s
+cold_items seed=42 ADF: RMSE=1.064069, NLL=1.439774, fit=2.69s
+cold_items seed=42 EP5: RMSE=1.072604, NLL=1.449131, fit=13.98s
+  cold_items seed=42 gamma=0: validation RMSE=0.875195, epoch=16
+  cold_items seed=42 gamma=10: validation RMSE=0.872794, epoch=14
+cold_items seed=42 MF_MAP: RMSE=1.057766, NLL=1.447102, fit=11.77s
+cold_items seed=42 GMRF_MAP: RMSE=1.048153, NLL=1.436289, fit=11.60s
+cold_items seed=42 Graph_selected: RMSE=1.048153, NLL=1.436289, fit=11.60s
+cold_users seed=42 ADF: RMSE=0.969555, NLL=1.390109, fit=2.35s
+cold_users seed=42 EP5: RMSE=0.971034, NLL=1.396750, fit=13.02s
+  cold_users seed=42 gamma=0: validation RMSE=0.867685, epoch=16
+  cold_users seed=42 gamma=10: validation RMSE=0.865978, epoch=12
+cold_users seed=42 MF_MAP: RMSE=0.981641, NLL=1.359307, fit=11.76s
+cold_users seed=42 GMRF_MAP: RMSE=0.979406, NLL=1.357130, fit=11.28s
+cold_users seed=42 Graph_selected: RMSE=0.979406, NLL=1.357130, fit=11.28s
+retain_0.25 seed=43 ADF: RMSE=0.925547, NLL=1.282052, fit=0.78s
+retain_0.25 seed=43 EP5: RMSE=0.925579, NLL=1.280883, fit=3.77s
+  retain_0.25 seed=43 gamma=0: validation RMSE=0.911399, epoch=25
+  retain_0.25 seed=43 gamma=10: validation RMSE=0.901898, epoch=25
+retain_0.25 seed=43 MF_MAP: RMSE=0.921525, NLL=1.278567, fit=3.37s
+retain_0.25 seed=43 GMRF_MAP: RMSE=0.913247, NLL=1.270143, fit=3.19s
+retain_0.25 seed=43 Graph_selected: RMSE=0.913247, NLL=1.270143, fit=3.19s
+retain_0.5 seed=43 ADF: RMSE=0.914253, NLL=1.268967, fit=1.43s
+retain_0.5 seed=43 EP5: RMSE=0.897659, NLL=1.251544, fit=7.35s
+  retain_0.5 seed=43 gamma=0: validation RMSE=0.876733, epoch=25
+  retain_0.5 seed=43 gamma=10: validation RMSE=0.871917, epoch=25
+retain_0.5 seed=43 MF_MAP: RMSE=0.885344, NLL=1.239576, fit=6.04s
+retain_0.5 seed=43 GMRF_MAP: RMSE=0.881932, NLL=1.236178, fit=5.90s
+retain_0.5 seed=43 Graph_selected: RMSE=0.881932, NLL=1.236178, fit=5.90s
+noise_0.1 seed=43 ADF: RMSE=0.915892, NLL=1.269601, fit=2.78s
+noise_0.1 seed=43 EP5: RMSE=0.894155, NLL=1.247176, fit=14.49s
+  noise_0.1 seed=43 gamma=0: validation RMSE=0.873871, epoch=25
+  noise_0.1 seed=43 gamma=10: validation RMSE=0.870369, epoch=25
+noise_0.1 seed=43 MF_MAP: RMSE=0.885432, NLL=1.241036, fit=12.79s
+noise_0.1 seed=43 GMRF_MAP: RMSE=0.882294, NLL=1.238153, fit=12.21s
+noise_0.1 seed=43 Graph_selected: RMSE=0.882294, NLL=1.238153, fit=12.21s
+noise_0.2 seed=43 ADF: RMSE=0.940675, NLL=1.295315, fit=2.90s
+noise_0.2 seed=43 EP5: RMSE=0.934493, NLL=1.287276, fit=14.77s
+  noise_0.2 seed=43 gamma=0: validation RMSE=0.920957, epoch=25
+  noise_0.2 seed=43 gamma=10: validation RMSE=0.912703, epoch=25
+noise_0.2 seed=43 MF_MAP: RMSE=0.932625, NLL=1.291377, fit=12.68s
+noise_0.2 seed=43 GMRF_MAP: RMSE=0.925732, NLL=1.285137, fit=11.91s
+noise_0.2 seed=43 Graph_selected: RMSE=0.925732, NLL=1.285137, fit=11.91s
+  graph_top_5 seed=43 gamma=0: validation RMSE=0.845433, epoch=25
+  graph_top_5 seed=43 gamma=10: validation RMSE=0.843683, epoch=25
+graph_top_5 seed=43 MF_MAP: RMSE=0.853231, NLL=1.203904, fit=12.33s
+graph_top_5 seed=43 GMRF_MAP: RMSE=0.852371, NLL=1.203167, fit=12.85s
+graph_top_5 seed=43 Graph_selected: RMSE=0.852371, NLL=1.203167, fit=12.85s
+  graph_top_50 seed=43 gamma=0: validation RMSE=0.845433, epoch=25
+  graph_top_50 seed=43 gamma=10: validation RMSE=0.844417, epoch=25
+graph_top_50 seed=43 MF_MAP: RMSE=0.853231, NLL=1.203904, fit=12.89s
+graph_top_50 seed=43 GMRF_MAP: RMSE=0.853226, NLL=1.204182, fit=12.34s
+graph_top_50 seed=43 Graph_selected: RMSE=0.853226, NLL=1.204182, fit=12.34s
+  ratings_only seed=43 gamma=0: validation RMSE=0.845433, epoch=25
+  ratings_only seed=43 gamma=10: validation RMSE=0.844031, epoch=25
+ratings_only seed=43 MF_MAP: RMSE=0.853231, NLL=1.203904, fit=12.42s
+ratings_only seed=43 GMRF_MAP: RMSE=0.852605, NLL=1.203456, fit=12.62s
+ratings_only seed=43 Graph_selected: RMSE=0.852605, NLL=1.203456, fit=12.62s
+  genres_only seed=43 gamma=0: validation RMSE=0.845433, epoch=25
+  genres_only seed=43 gamma=10: validation RMSE=0.844979, epoch=25
+genres_only seed=43 MF_MAP: RMSE=0.853231, NLL=1.203904, fit=13.24s
+genres_only seed=43 GMRF_MAP: RMSE=0.853729, NLL=1.204679, fit=11.13s
+genres_only seed=43 Graph_selected: RMSE=0.853729, NLL=1.204679, fit=11.13s
+cold_items seed=43 ADF: RMSE=1.067693, NLL=1.448351, fit=2.76s
+cold_items seed=43 EP5: RMSE=1.076020, NLL=1.458292, fit=13.41s
+  cold_items seed=43 gamma=0: validation RMSE=0.870263, epoch=25
+  cold_items seed=43 gamma=10: validation RMSE=0.867822, epoch=25
+cold_items seed=43 MF_MAP: RMSE=1.059816, NLL=1.453705, fit=10.77s
+cold_items seed=43 GMRF_MAP: RMSE=1.052328, NLL=1.445562, fit=10.52s
+cold_items seed=43 Graph_selected: RMSE=1.052328, NLL=1.445562, fit=10.52s
+cold_users seed=43 ADF: RMSE=0.996953, NLL=1.387076, fit=2.47s
+cold_users seed=43 EP5: RMSE=1.000189, NLL=1.394239, fit=13.11s
+  cold_users seed=43 gamma=0: validation RMSE=0.862225, epoch=25
+  cold_users seed=43 gamma=10: validation RMSE=0.860772, epoch=25
+cold_users seed=43 MF_MAP: RMSE=1.004561, NLL=1.380960, fit=11.25s
+cold_users seed=43 GMRF_MAP: RMSE=1.002707, NLL=1.379051, fit=11.19s
+cold_users seed=43 Graph_selected: RMSE=1.002707, NLL=1.379051, fit=11.19s
+retain_0.25 seed=44 ADF: RMSE=0.922260, NLL=1.278736, fit=0.78s
+retain_0.25 seed=44 EP5: RMSE=0.918601, NLL=1.274487, fit=3.75s
+  retain_0.25 seed=44 gamma=0: validation RMSE=0.919804, epoch=25
+  retain_0.25 seed=44 gamma=10: validation RMSE=0.910517, epoch=25
+retain_0.25 seed=44 MF_MAP: RMSE=0.918464, NLL=1.275098, fit=3.16s
+retain_0.25 seed=44 GMRF_MAP: RMSE=0.910950, NLL=1.267343, fit=3.46s
+retain_0.25 seed=44 Graph_selected: RMSE=0.910950, NLL=1.267343, fit=3.46s
+retain_0.5 seed=44 ADF: RMSE=0.909889, NLL=1.264656, fit=1.45s
+retain_0.5 seed=44 EP5: RMSE=0.889639, NLL=1.244340, fit=8.01s
+  retain_0.5 seed=44 gamma=0: validation RMSE=0.883053, epoch=25
+  retain_0.5 seed=44 gamma=10: validation RMSE=0.878182, epoch=25
+retain_0.5 seed=44 MF_MAP: RMSE=0.879900, NLL=1.233587, fit=6.64s
+retain_0.5 seed=44 GMRF_MAP: RMSE=0.876697, NLL=1.230256, fit=6.56s
+retain_0.5 seed=44 Graph_selected: RMSE=0.876697, NLL=1.230256, fit=6.56s
+noise_0.1 seed=44 ADF: RMSE=0.913970, NLL=1.267827, fit=3.09s
+noise_0.1 seed=44 EP5: RMSE=0.891883, NLL=1.244997, fit=16.36s
+  noise_0.1 seed=44 gamma=0: validation RMSE=0.878445, epoch=25
+  noise_0.1 seed=44 gamma=10: validation RMSE=0.874853, epoch=25
+noise_0.1 seed=44 MF_MAP: RMSE=0.883077, NLL=1.238645, fit=13.27s
+noise_0.1 seed=44 GMRF_MAP: RMSE=0.880318, NLL=1.236063, fit=12.91s
+noise_0.1 seed=44 Graph_selected: RMSE=0.880318, NLL=1.236063, fit=12.91s
+noise_0.2 seed=44 ADF: RMSE=0.939984, NLL=1.294885, fit=3.06s
+noise_0.2 seed=44 EP5: RMSE=0.933132, NLL=1.286264, fit=16.35s
+  noise_0.2 seed=44 gamma=0: validation RMSE=0.928008, epoch=25
+  noise_0.2 seed=44 gamma=10: validation RMSE=0.919190, epoch=25
+noise_0.2 seed=44 MF_MAP: RMSE=0.933413, NLL=1.292016, fit=13.18s
+noise_0.2 seed=44 GMRF_MAP: RMSE=0.926020, NLL=1.285270, fit=13.43s
+noise_0.2 seed=44 Graph_selected: RMSE=0.926020, NLL=1.285270, fit=13.43s
+  graph_top_5 seed=44 gamma=0: validation RMSE=0.850905, epoch=24
+  graph_top_5 seed=44 gamma=10: validation RMSE=0.849387, epoch=21
+graph_top_5 seed=44 MF_MAP: RMSE=0.851253, NLL=1.201350, fit=12.99s
+graph_top_5 seed=44 GMRF_MAP: RMSE=0.850449, NLL=1.200674, fit=12.81s
+graph_top_5 seed=44 Graph_selected: RMSE=0.850449, NLL=1.200674, fit=12.81s

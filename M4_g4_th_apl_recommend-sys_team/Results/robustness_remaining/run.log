@@ -1,0 +1,31 @@
+Warming kernels; compilation excluded from fit timing.
+  graph_top_50 seed=44 gamma=0: validation RMSE=0.850905, epoch=24
+  graph_top_50 seed=44 gamma=10: validation RMSE=0.850244, epoch=21
+graph_top_50 seed=44 MF_MAP: RMSE=0.851253, NLL=1.201350, fit=28.28s
+graph_top_50 seed=44 GMRF_MAP: RMSE=0.851169, NLL=1.201548, fit=31.34s
+graph_top_50 seed=44 Graph_selected: RMSE=0.851169, NLL=1.201548, fit=31.34s
+  ratings_only seed=44 gamma=0: validation RMSE=0.850905, epoch=24
+  ratings_only seed=44 gamma=10: validation RMSE=0.849383, epoch=22
+ratings_only seed=44 MF_MAP: RMSE=0.851253, NLL=1.201350, fit=50.56s
+ratings_only seed=44 GMRF_MAP: RMSE=0.850594, NLL=1.200873, fit=37.05s
+ratings_only seed=44 Graph_selected: RMSE=0.850594, NLL=1.200873, fit=37.05s
+  genres_only seed=44 gamma=0: validation RMSE=0.850905, epoch=24
+  genres_only seed=44 gamma=10: validation RMSE=0.850882, epoch=25
+genres_only seed=44 MF_MAP: RMSE=0.851253, NLL=1.201350, fit=27.19s
+genres_only seed=44 GMRF_MAP: RMSE=0.851710, NLL=1.202132, fit=29.69s
+genres_only seed=44 Graph_selected: RMSE=0.851710, NLL=1.202132, fit=29.69s
+cold_items seed=44 ADF: RMSE=1.079205, NLL=1.453757, fit=3.79s
+cold_items seed=44 EP5: RMSE=1.085666, NLL=1.462138, fit=18.54s
+  cold_items seed=44 gamma=0: validation RMSE=0.878496, epoch=25
+  cold_items seed=44 gamma=10: validation RMSE=0.876581, epoch=25
+cold_items seed=44 MF_MAP: RMSE=1.069076, NLL=1.460805, fit=24.14s
+cold_items seed=44 GMRF_MAP: RMSE=1.063085, NLL=1.454354, fit=26.98s
+cold_items seed=44 Graph_selected: RMSE=1.063085, NLL=1.454354, fit=26.98s
+cold_users seed=44 ADF: RMSE=0.984466, NLL=1.391056, fit=4.25s
+cold_users seed=44 EP5: RMSE=0.987107, NLL=1.398087, fit=22.14s
+  cold_users seed=44 gamma=0: validation RMSE=0.866596, epoch=16
+  cold_users seed=44 gamma=10: validation RMSE=0.865508, epoch=14
+cold_users seed=44 MF_MAP: RMSE=0.994440, NLL=1.371750, fit=29.72s
+cold_users seed=44 GMRF_MAP: RMSE=0.992609, NLL=1.369817, fit=23.64s
+cold_users seed=44 Graph_selected: RMSE=0.992609, NLL=1.369817, fit=23.64s
+Completed: /workspace/scratch/88c05d49406a/m3_build/M3_g4_th_apl_recommend-sys_team/Results/robustness_remaining
